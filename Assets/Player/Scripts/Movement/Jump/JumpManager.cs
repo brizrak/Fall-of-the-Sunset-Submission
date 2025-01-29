@@ -45,8 +45,11 @@ public class JumpManager : MonoBehaviour
         {
             jump.EndJump();
         }
-        else
+        else if (states.isAirJumped)
         {
+            airJump.EndJump();
+        }
+        else {
             wallJump.EndJump();
         }
     }
@@ -54,6 +57,20 @@ public class JumpManager : MonoBehaviour
     public void StopJump()
     {
         jump.StopJump();
+        airJump.StopJump();
         wallJump.StopJump();
     }
+
+    //Задача17
+    //
+    //[SerializeField] private LayerMask groundLayer;
+    //[SerializeField] private Collider2D topCheck;
+    //
+    //private void FixedUpdate()
+    //{
+    //    if (topCheck.IsTouchingLayers(groundLayer) && (states.isJumped || states.isWallJumped || states.isAirJumped))
+    //    {
+    //        StopJump();
+    //    }
+    //}
 }
