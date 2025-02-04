@@ -37,7 +37,10 @@ public class Move : MonoBehaviour
 
     private void PlayerMove()
     {
-        if (!states.isCanMove) { return; }
+        if (!states.isCanMove) {
+            currentSpeed = 0;
+            return;
+        }
 
         if (moveInput.x != 0)
         {
@@ -48,7 +51,7 @@ public class Move : MonoBehaviour
             currentSpeed = Mathf.MoveTowards(currentSpeed, 0, decereration * Time.fixedDeltaTime);
         }
 
-        rb.linearVelocityX = currentSpeed * moveSpeed;
+        rb.linearVelocityX = moveInput.x * moveSpeed;
     }
 
     private void MaxFallSpeed()

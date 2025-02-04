@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 public class WallJump : Jump
@@ -5,17 +6,14 @@ public class WallJump : Jump
     [SerializeField] private float sideStartPush;
     [SerializeField] private float sideForce;
 
+    private float sideStartPushSigned;
+    private float sideForceSigned;
+
     public override void StartJump()
     {
+        SetSide();
         states.isCanMove = false;
-        if (states.isSlide == PlayerStates.Sides.right)
-        {
-            rb.linearVelocityX = -sideStartPush;
-        }
-        else
-        {
-            rb.linearVelocityX = sideStartPush;
-        }
+        rb.linearVelocityX = sideStartPushSigned;
         states.isSlide = PlayerStates.Sides.none;
         rb.linearVelocityY = startPush;
         isStartJumped = true;
@@ -33,21 +31,36 @@ public class WallJump : Jump
     {
         base.FixedUpdate();
 
-        if (isStartJumped && rb.linearVelocityX < sideForce)
+        if (isStartJumped && rb.linearVelocityX < math.abs(sideForceSigned))
         {
-            rb.linearVelocityX = sideStartPush;
+            rb.linearVelocityX = sideForceSigned;
         }
     }
 
     protected override void SetForce()
     {
         base.SetForce();
-        rb.linearVelocityX = sideForce;
+
+        rb.linearVelocityX = sideForceSigned;
     }
 
     protected override void IsJumped(bool jumped)
     {
         isJumped = jumped;
         states.isWallJumped = jumped;
+    }
+
+    private void SetSide()
+    {
+        if (states.isSlide == PlayerStates.Sides.right)
+        {
+            sideStartPushSigned = -sideStartPush;
+            sideForceSigned = -sideForce;
+        }
+        else if (states.isSlide == PlayerStates.Sides.left)
+        {
+            sideStartPushSigned = sideStartPush;
+            sideForceSigned = sideForce;
+        }
     }
 }
