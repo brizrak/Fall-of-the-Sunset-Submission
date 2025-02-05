@@ -4,12 +4,16 @@ using UnityEngine;
 [RequireComponent (typeof(Jump), typeof(WallJump), typeof(AirJump))]
 public class JumpManager : MonoBehaviour
 {
+    [SerializeField] private float jumpBuffer;
+
     private Jump jump;
     private WallJump wallJump;
     private AirJump airJump;
     private PlayerStateManager states;
 
     [HideInInspector] public bool isCanAirJump = false;
+    private float timer = 0f;
+    private bool isEnded = false;
 
     private void Awake()
     {
@@ -17,6 +21,24 @@ public class JumpManager : MonoBehaviour
         jump = GetComponent<Jump>();
         wallJump = GetComponent<WallJump>();
         airJump = GetComponent<AirJump>();
+    }
+
+    private void Update()
+    {
+        if (timer > 0f)
+        {
+            timer -= Time.deltaTime;
+            if (states.isGrounded)
+            {
+                jump.StartJump();
+                timer = -1f;
+                if (isEnded)
+                {
+                    jump.EndJump();
+                    isEnded = false;
+                }
+            }
+        }
     }
 
     public void StartJump()
@@ -31,6 +53,10 @@ public class JumpManager : MonoBehaviour
             {
                 airJump.StartJump();
                 isCanAirJump = false;
+            }
+            else
+            {
+                timer = jumpBuffer;
             }
         }
         else
@@ -51,6 +77,11 @@ public class JumpManager : MonoBehaviour
         }
         else {
             wallJump.EndJump();
+        }
+
+        if (timer > 0f)
+        {
+            isEnded = true;
         }
     }
 
