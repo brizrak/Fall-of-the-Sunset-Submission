@@ -33,6 +33,7 @@ public class Move : MonoBehaviour
         PlayerMove();
         MaxFallSpeed();
         Slide();
+        MoveSide();
     }
 
     private void PlayerMove()
@@ -54,6 +55,20 @@ public class Move : MonoBehaviour
         rb.linearVelocityX = moveInput.x * moveSpeed;
     }
 
+    public void MoveSide()
+    {
+        if (!states.isCanMove) return;
+
+        if (moveInput.x < 0)
+        {
+            states.viewSide = PlayerStates.Sides.left;
+        }
+        else if (moveInput.x > 0)
+        {
+            states.viewSide = PlayerStates.Sides.right;
+        }
+    }
+
     private void MaxFallSpeed()
     {
         if (rb.linearVelocityY < maxFallSpeed)
@@ -64,7 +79,7 @@ public class Move : MonoBehaviour
 
     private void Slide()
     {
-        if (!states.isCanMove || !states.isCanSlide) { return; }
+        if (!states.isCanMove || !states.slideIsUnlocked) { return; }
 
         if (!states.isJumped && !states.isGrounded && moveInput.x != 0 && states.isSlide == PlayerStates.Sides.none)
         {

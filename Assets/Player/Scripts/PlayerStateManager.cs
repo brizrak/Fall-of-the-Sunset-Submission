@@ -1,7 +1,5 @@
 using UnityEngine;
-using static UnityEditor.VersionControl.Asset;
 
-[RequireComponent (typeof(JumpManager))]
 public class PlayerStateManager : PlayerStates
 {
     [SerializeField] private LayerMask groundLayer;
@@ -9,11 +7,9 @@ public class PlayerStateManager : PlayerStates
     [SerializeField] private Collider2D bottomCheck;
 
     private float coyoteTimeCounter;
-    private JumpManager jumpManager;
 
     private void Awake()
     {
-        jumpManager = GetComponent<JumpManager>();
         isSlide = Sides.none;
     }
 
@@ -24,9 +20,16 @@ public class PlayerStateManager : PlayerStates
             isGrounded = false;
         }
 
-        if ((isGrounded || isSlide != Sides.none) && isCanDoubleJump)
+        if (isGrounded || isSlide != Sides.none)
         {
-            jumpManager.isCanAirJump = true;
+            if (dashIsUnlocked)
+            {
+                isCanDash = true;
+            }
+            if (airJumpIsUnlocked)
+            {
+                isCanAirJump = true;
+            }
         }
 
         CoyoteTime();
@@ -64,7 +67,18 @@ public class PlayerStateManager : PlayerStates
 
     public void CanAirJump()
     {
-        isCanDoubleJump = true;
-        jumpManager.isCanAirJump = true;
+        airJumpIsUnlocked = true;
+        isCanAirJump = true;
+    }
+
+    public void CanSlide()
+    {
+        slideIsUnlocked = true;
+    }
+
+    public void CanDash()
+    {
+        dashIsUnlocked = true;
+        isCanDash = true;
     }
 }

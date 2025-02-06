@@ -10,8 +10,6 @@ public class JumpManager : MonoBehaviour
     private WallJump wallJump;
     private AirJump airJump;
     private PlayerStateManager states;
-
-    [HideInInspector] public bool isCanAirJump = false;
     private float timer = 0f;
     private bool isEnded = false;
 
@@ -49,10 +47,10 @@ public class JumpManager : MonoBehaviour
             {
                 jump.StartJump();
             }
-            else if (isCanAirJump)
+            else if (states.isCanAirJump)
             {
                 airJump.StartJump();
-                isCanAirJump = false;
+                states.isCanAirJump = false;
             }
             else
             {
@@ -83,6 +81,12 @@ public class JumpManager : MonoBehaviour
         {
             isEnded = true;
         }
+    }
+
+    public bool IsJumping()
+    {
+        if (states.isJumped || states.isWallJumped || states.isAirJumped) return true;
+        return false;
     }
 
     public void StopJump()
