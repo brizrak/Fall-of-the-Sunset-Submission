@@ -8,6 +8,7 @@ public class Move : MonoBehaviour
     [SerializeField] private float decereration;
     [SerializeField] private float maxFallSpeed;
     [SerializeField] private float slideSpeed;
+    [SerializeField] private float slideBuffer;
 
     [Header("Checkers")]
     [SerializeField] private LayerMask groundLayer;
@@ -19,6 +20,7 @@ public class Move : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerStateManager states;
     private float currentSpeed = 0;
+    private float bufferTimer;
     private Vector2 moveInput;
     public void MoveInput(Vector2 moveInput) { this.moveInput = moveInput; }
 
@@ -34,6 +36,7 @@ public class Move : MonoBehaviour
         MaxFallSpeed();
         Slide();
         MoveSide();
+        SlideBufferTimer();
     }
 
     private void PlayerMove()
@@ -100,12 +103,14 @@ public class Move : MonoBehaviour
             if (IsTouchingWall() == PlayerStates.Sides.none || states.isGrounded)
             {
                 states.isSlide = PlayerStates.Sides.none;
+                bufferTimer = slideBuffer;
             } 
 
             else if ((moveInput.x > 0 && states.isSlide == PlayerStates.Sides.left)
                 || (moveInput.x < 0 && states.isSlide == PlayerStates.Sides.right))
             {
                 states.isSlide = PlayerStates.Sides.none;
+                bufferTimer = slideBuffer;
             }
             else
             {
@@ -125,5 +130,24 @@ public class Move : MonoBehaviour
             return PlayerStates.Sides.right;
         }
         return PlayerStates.Sides.none;
+    }
+
+    private void SlideBufferTimer()
+    {
+        if (bufferTimer > slideBuffer) return;
+        if (bufferTimer > 0)
+        {
+            bufferTimer -= Time.fixedDeltaTime;
+        }
+        else
+        {
+            bufferTimer = slideBuffer + 1f;
+        }
+    }
+
+    public bool CanWallJump()
+    {
+        if (bufferTimer > 0 && bufferTimer <= slideBuffer) return true;
+        return false;
     }
 }

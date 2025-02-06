@@ -1,6 +1,7 @@
 using UnityEngine;
 
 [RequireComponent (typeof(PlayerStateManager))]
+[RequireComponent (typeof(Move))]
 [RequireComponent (typeof(Jump), typeof(WallJump), typeof(AirJump))]
 public class JumpManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class JumpManager : MonoBehaviour
     private WallJump wallJump;
     private AirJump airJump;
     private PlayerStateManager states;
+    private Move move;
     private float timer = 0f;
     private bool isEnded = false;
 
@@ -19,6 +21,7 @@ public class JumpManager : MonoBehaviour
         jump = GetComponent<Jump>();
         wallJump = GetComponent<WallJump>();
         airJump = GetComponent<AirJump>();
+        move = GetComponent<Move>();
     }
 
     private void Update()
@@ -41,7 +44,7 @@ public class JumpManager : MonoBehaviour
 
     public void StartJump()
     {
-        if (states.isSlide == PlayerStates.Sides.none)
+        if ((states.isSlide == PlayerStates.Sides.none) && !move.CanWallJump())
         {
             if (states.isGrounded)
             {

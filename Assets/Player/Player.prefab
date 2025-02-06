@@ -330,6 +330,7 @@ GameObject:
   - component: {fileID: 2557931971536049483}
   - component: {fileID: 2419050725057957686}
   - component: {fileID: 7944659958417537481}
+  - component: {fileID: 5009351342496095646}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -405,14 +406,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc819e22efd58443a3f8543b710f73f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCanSlide: 1
-  isCanDoubleJump: 1
   isCanMove: 1
+  slideIsUnlocked: 1
+  airJumpIsUnlocked: 0
+  dashIsUnlocked: 1
   isGrounded: 0
   isJumped: 0
   isAirJumped: 0
   isWallJumped: 0
   isSlide: 0
+  viewSide: 1
+  isDashing: 0
+  isCanAirJump: 0
+  isCanDash: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -431,10 +437,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 4
-  maxFallSpeed: -15
   acceleration: 10
   decereration: 15
+  maxFallSpeed: -15
   slideSpeed: -3.2
+  slideBuffer: 0.06
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -507,7 +514,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f38aa3b2ff6d214ab38a88e2e1a2381, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isCanAirJump: 0
+  jumpBuffer: 0.1
+--- !u!114 &5009351342496095646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4665463417582589550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 837f8e7c529c0e34eab18ebe04114317, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dashSpeed: 10
+  dashTime: 0.2
 --- !u!1 &5077413342636862753
 GameObject:
   m_ObjectHideFlags: 0
