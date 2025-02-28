@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(PlayerStateManager))]
@@ -20,6 +21,7 @@ public class Move : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerStateManager states;
     private float currentSpeed = 0;
+    private float currentAcceleration;
     private float bufferTimer;
     private Vector2 moveInput;
     public void MoveInput(Vector2 moveInput) { this.moveInput = moveInput; }
@@ -46,16 +48,11 @@ public class Move : MonoBehaviour
             return;
         }
 
-        if (moveInput.x != 0)
-        {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, moveInput.x, acceleration * Time.fixedDeltaTime);
-        }
-        else
-        {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0, decereration * Time.fixedDeltaTime);
-        }
+        currentAcceleration = moveInput.x != 0 ? acceleration : decereration;
 
-        rb.linearVelocityX = moveInput.x * moveSpeed;
+        currentSpeed = Mathf.MoveTowards(currentSpeed, Math.Sign(moveInput.x), currentAcceleration * Time.fixedDeltaTime);
+
+        rb.linearVelocityX = currentSpeed * moveSpeed;
     }
 
     public void MoveSide()

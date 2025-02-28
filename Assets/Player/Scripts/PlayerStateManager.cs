@@ -11,6 +11,7 @@ public class PlayerStateManager : PlayerStates
     private void Awake()
     {
         isSlide = Sides.none;
+        viewSide = Sides.right;
     }
 
     private void Update()

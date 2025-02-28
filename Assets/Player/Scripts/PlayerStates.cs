@@ -7,7 +7,7 @@ public class PlayerStates : MonoBehaviour
     public bool airJumpIsUnlocked;
     public bool dashIsUnlocked;
 
-    [HideInInspector] public bool isGrounded = false;
+    [HideInInspector] public bool isGrounded;
     [HideInInspector] public bool isJumped = false;
     [HideInInspector] public bool isAirJumped = false;
     [HideInInspector] public bool isWallJumped = false;
