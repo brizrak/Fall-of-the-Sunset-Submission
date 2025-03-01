@@ -6,6 +6,8 @@ using UnityEngine;
 public class JumpManager : MonoBehaviour
 {
     [SerializeField] private float jumpBuffer;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Collider2D topCheck;
 
     private Jump jump;
     private WallJump wallJump;
@@ -76,7 +78,8 @@ public class JumpManager : MonoBehaviour
         {
             airJump.EndJump();
         }
-        else {
+        else if (states.isWallJumped)
+        {
             wallJump.EndJump();
         }
 
@@ -99,16 +102,13 @@ public class JumpManager : MonoBehaviour
         wallJump.StopJump();
     }
 
-    //Задача17
-    //
-    //[SerializeField] private LayerMask groundLayer;
-    //[SerializeField] private Collider2D topCheck;
-    //
-    //private void FixedUpdate()
-    //{
-    //    if (topCheck.IsTouchingLayers(groundLayer) && (states.isJumped || states.isWallJumped || states.isAirJumped))
-    //    {
-    //        StopJump();
-    //    }
-    //}
+    private void FixedUpdate()
+    {
+        if (!IsJumping()) return;
+
+        if (topCheck.IsTouchingLayers(groundLayer) && (states.isJumped || states.isWallJumped || states.isAirJumped))
+        {
+            StopJump();
+        }
+    }
 }

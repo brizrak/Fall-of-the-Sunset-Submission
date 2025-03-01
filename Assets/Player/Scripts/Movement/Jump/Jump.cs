@@ -13,15 +13,15 @@ public class Jump : MonoBehaviour
     protected PlayerStateManager states;
 
     private float timer;
-    protected bool isStartJumped = false;
-    private bool isEndJumped = false;
-    protected bool isJumped = false;
-    private bool isStoped = false;
+    protected bool isStarting = false;
+    private bool isEndPushing = false;
+    protected bool isJumping = false;
+    private bool isEnding = false;
 
-    protected virtual void IsJumped(bool jumped)
+    protected virtual void IsJumping(bool jumping)
     {
-        isJumped = jumped;
-        states.isJumped = jumped;
+        isJumping = jumping;
+        states.isJumped = jumping;
     }
 
     private void Awake()
@@ -30,21 +30,22 @@ public class Jump : MonoBehaviour
         states = GetComponent<PlayerStateManager>();
     }
 
+
     public virtual void StartJump()
     {
         rb.linearVelocityY = startPush;
-        isStartJumped = true;
-        IsJumped(true);
+        isStarting = true;
+        IsJumping(true);
     }
 
     public void EndJump()
     {
-        if (isStartJumped)
+        if (isStarting)
         {
-            isStoped = true;
+            isEnding = true;
             return;
         }
-        if (isJumped && !isStartJumped && !isEndJumped)
+        if (isJumping && !isStarting && !isEndPushing)
         {
             End();
         }
@@ -53,24 +54,20 @@ public class Jump : MonoBehaviour
     protected virtual void End()
     {
         rb.linearVelocityY = endPush;
-        isEndJumped = true;
-        isStoped = false;
+        isEndPushing = true;
+        isEnding = false;
     }
 
     protected virtual void FixedUpdate()
     {
-        if (rb.linearVelocityY <= 0 && isJumped)
-        {
-            IsJumped(false);
-            isEndJumped = false;
-        }
+        if (!isJumping) return;
 
-        if (isStartJumped)
+        if (isStarting)
         {
             if (rb.linearVelocityY < force)
             {
-                isStartJumped = false;
-                if (isStoped)
+                isStarting = false;
+                if (isEnding)
                 {
                     EndJump();
                 }
@@ -82,7 +79,7 @@ public class Jump : MonoBehaviour
             }
         }
 
-        if (isJumped && !isStartJumped && !isEndJumped)
+        if (isJumping && !isStarting && !isEndPushing)
         {
             if (timer > 0)
             {
@@ -94,6 +91,12 @@ public class Jump : MonoBehaviour
                 EndJump();
             }
         }
+
+        if (rb.linearVelocityY <= 0 && isJumping)
+        {
+            IsJumping(false);
+            isEndPushing = false;
+        }
     }
 
     protected virtual void SetForce()
@@ -101,12 +104,12 @@ public class Jump : MonoBehaviour
         rb.linearVelocityY = force;
     }
 
-    public void StopJump()
+    public virtual void StopJump()
     {
         rb.linearVelocityY = stopPush;
-        isStartJumped = false;
-        isEndJumped = false;
-        isStoped = false;
-        IsJumped(false);
+        isStarting = false;
+        isEndPushing = false;
+        isEnding = false;
+        IsJumping(false);
     }
 }

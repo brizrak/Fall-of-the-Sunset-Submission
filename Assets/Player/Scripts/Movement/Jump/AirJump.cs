@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class AirJump : Jump
 {
-    protected override void IsJumped(bool jumped)
+    protected override void IsJumping(bool jumped)
     {
-        isJumped = jumped;
+        isJumping = jumped;
         states.isAirJumped = jumped;
     }
 }
