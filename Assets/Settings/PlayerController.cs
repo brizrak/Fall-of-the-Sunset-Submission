@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
         actions.Player.Move.performed += context => playerMove.MoveInput(context.ReadValue<Vector2>());
         actions.Player.Move.canceled += context => playerMove.MoveInput(Vector2.zero);
 
-        actions.Player.Dash.performed += context => dash.StartDash();
+        actions.Player.Dash.performed += context => dash.TryActivate();
 
         //Debug
         actions.Player.Stop.performed += context => jumpManager.StopJump();

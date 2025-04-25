@@ -1,6 +1,7 @@
+using Player.Scripts;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(PlayerStateManager))]
+[RequireComponent(typeof(Rigidbody2D), typeof(PlayerStateOldManagerOld))]
 public class Jump : MonoBehaviour
 {
     [SerializeField] protected float startPush;
@@ -10,7 +11,7 @@ public class Jump : MonoBehaviour
     [SerializeField] private float stopPush;
 
     protected Rigidbody2D rb;
-    protected PlayerStateManager states;
+    protected PlayerStateOldManagerOld StatesOld;
 
     private float timer;
     protected bool isStarting = false;
@@ -21,13 +22,13 @@ public class Jump : MonoBehaviour
     protected virtual void IsJumping(bool jumping)
     {
         isJumping = jumping;
-        states.isJumped = jumping;
+        StatesOld.isJumped = jumping;
     }
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        states = GetComponent<PlayerStateManager>();
+        StatesOld = GetComponent<PlayerStateOldManagerOld>();
     }
 
 

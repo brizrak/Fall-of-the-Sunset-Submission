@@ -12,9 +12,9 @@ public class WallJump : Jump
     public override void StartJump()
     {
         SetSide();
-        states.isCanMove = false;
+        StatesOld.isCanMove = false;
         rb.linearVelocityX = sideStartPushSigned;
-        states.isSlide = PlayerStates.Sides.none;
+        StatesOld.isSlide = PlayerStatesOld.Sides.none;
 
         base.StartJump();
     }
@@ -23,7 +23,7 @@ public class WallJump : Jump
     {
         base.End();
 
-        states.isCanMove = true;
+        StatesOld.isCanMove = true;
     }
 
     protected override void FixedUpdate()
@@ -46,17 +46,17 @@ public class WallJump : Jump
     protected override void IsJumping(bool jumped)
     {
         isJumping = jumped;
-        states.isWallJumped = jumped;
+        StatesOld.isWallJumped = jumped;
     }
 
     private void SetSide()
     {
-        if (states.isSlide == PlayerStates.Sides.right)
+        if (StatesOld.isSlide == PlayerStatesOld.Sides.right)
         {
             sideStartPushSigned = -sideStartPush;
             sideForceSigned = -sideForce;
         }
-        else if (states.isSlide == PlayerStates.Sides.left)
+        else if (StatesOld.isSlide == PlayerStatesOld.Sides.left)
         {
             sideStartPushSigned = sideStartPush;
             sideForceSigned = sideForce;
@@ -67,6 +67,6 @@ public class WallJump : Jump
     {
         base.StopJump();
 
-        states.isCanMove = true;
+        StatesOld.isCanMove = true;
     }
 }

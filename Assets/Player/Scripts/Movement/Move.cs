@@ -1,7 +1,8 @@
 using System;
+using Player.Scripts.States;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(PlayerStateManager))]
+[RequireComponent(typeof(Rigidbody2D), typeof(PlayerStates))]
 public class Move : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
@@ -19,7 +20,7 @@ public class Move : MonoBehaviour
     [SerializeField] private Collider2D rightTopCheck;
 
     private Rigidbody2D rb;
-    private PlayerStateManager states;
+    private PlayerStates _states;
     private float currentSpeed = 0;
     private float currentAcceleration;
     private float bufferTimer;
@@ -29,21 +30,21 @@ public class Move : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        states = GetComponent<PlayerStateManager>();
+        _states = GetComponent<PlayerStates>();
     }
 
     private void FixedUpdate()
     {
         PlayerMove();
         MaxFallSpeed();
-        Slide();
+        // Slide();
         MoveSide();
         SlideBufferTimer();
     }
 
     private void PlayerMove()
     {
-        if (!states.isCanMove) {
+        if (!_states.isCanMove) {
             currentSpeed = 0;
             return;
         }
@@ -57,15 +58,15 @@ public class Move : MonoBehaviour
 
     public void MoveSide()
     {
-        if (!states.isCanMove) return;
+        if (!_states.isCanMove) return;
 
         if (moveInput.x < 0)
         {
-            states.viewSide = PlayerStates.Sides.left;
+            _states.direction = ViewDirection.Left;
         }
         else if (moveInput.x > 0)
         {
-            states.viewSide = PlayerStates.Sides.right;
+            _states.direction = ViewDirection.Right;
         }
     }
 
@@ -77,56 +78,56 @@ public class Move : MonoBehaviour
         }
     }
 
-    private void Slide()
-    {
-        if (!states.isCanMove || !states.slideIsUnlocked) { return; }
+    // private void Slide()
+    // {
+    //     if (!_states.isCanMove || !_states.slideIsUnlocked) { return; }
+    //
+    //     if (!_states.isJumped && !_states.isGrounded && moveInput.x != 0 && _states.isSlide == PlayerStatesOld.Sides.none)
+    //     {
+    //         if (moveInput.x < 0 && IsTouchingWall() == PlayerStatesOld.Sides.left)
+    //         {
+    //             _states.isSlide = PlayerStatesOld.Sides.left;
+    //             _states.isJumped = false;
+    //         }
+    //         else if (moveInput.x > 0 && IsTouchingWall() == PlayerStatesOld.Sides.right)
+    //         {
+    //             _states.isSlide = PlayerStatesOld.Sides.right;
+    //             _states.isJumped = false;
+    //         }
+    //     }
+    //
+    //     if (_states.isSlide != PlayerStatesOld.Sides.none)
+    //     {
+    //         if (IsTouchingWall() == PlayerStatesOld.Sides.none || _states.isGrounded)
+    //         {
+    //             _states.isSlide = PlayerStatesOld.Sides.none;
+    //             bufferTimer = slideBuffer;
+    //         } 
+    //
+    //         else if ((moveInput.x > 0 && _states.isSlide == PlayerStatesOld.Sides.left)
+    //             || (moveInput.x < 0 && _states.isSlide == PlayerStatesOld.Sides.right))
+    //         {
+    //             _states.isSlide = PlayerStatesOld.Sides.none;
+    //             bufferTimer = slideBuffer;
+    //         }
+    //         else
+    //         {
+    //             rb.linearVelocityY = slideSpeed;
+    //         }
+    //     }
+    // }
 
-        if (!states.isJumped && !states.isGrounded && moveInput.x != 0 && states.isSlide == PlayerStates.Sides.none)
-        {
-            if (moveInput.x < 0 && IsTouchingWall() == PlayerStates.Sides.left)
-            {
-                states.isSlide = PlayerStates.Sides.left;
-                states.isJumped = false;
-            }
-            else if (moveInput.x > 0 && IsTouchingWall() == PlayerStates.Sides.right)
-            {
-                states.isSlide = PlayerStates.Sides.right;
-                states.isJumped = false;
-            }
-        }
-
-        if (states.isSlide != PlayerStates.Sides.none)
-        {
-            if (IsTouchingWall() == PlayerStates.Sides.none || states.isGrounded)
-            {
-                states.isSlide = PlayerStates.Sides.none;
-                bufferTimer = slideBuffer;
-            } 
-
-            else if ((moveInput.x > 0 && states.isSlide == PlayerStates.Sides.left)
-                || (moveInput.x < 0 && states.isSlide == PlayerStates.Sides.right))
-            {
-                states.isSlide = PlayerStates.Sides.none;
-                bufferTimer = slideBuffer;
-            }
-            else
-            {
-                rb.linearVelocityY = slideSpeed;
-            }
-        }
-    }
-
-    private PlayerStates.Sides IsTouchingWall()
+    private PlayerStatesOld.Sides IsTouchingWall()
     {
         if (leftBotCheck.IsTouchingLayers(groundLayer) || leftTopCheck.IsTouchingLayers(groundLayer))
         {
-            return PlayerStates.Sides.left;
+            return PlayerStatesOld.Sides.left;
         }
         if (rightBotCheck.IsTouchingLayers(groundLayer) || rightTopCheck.IsTouchingLayers(groundLayer))
         {
-            return PlayerStates.Sides.right;
+            return PlayerStatesOld.Sides.right;
         }
-        return PlayerStates.Sides.none;
+        return PlayerStatesOld.Sides.none;
     }
 
     private void SlideBufferTimer()

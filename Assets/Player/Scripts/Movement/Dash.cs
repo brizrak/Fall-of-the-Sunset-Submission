@@ -1,22 +1,24 @@
+using Player.Abilities;
+using Player.Scripts.States;
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerStateManager), typeof(Rigidbody2D), typeof(JumpManager))]
-public class Dash : MonoBehaviour
+[RequireComponent(typeof(PlayerStates), typeof(Rigidbody2D), typeof(JumpManager))]
+public class Dash : Ability
 {
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashTime;
 
     private Rigidbody2D rb;
-    private PlayerStateManager states;
     private JumpManager jumpManager;
     private bool isDashing;
     private float gravityScale;
     private float timer;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        
         rb = GetComponent<Rigidbody2D>();
-        states = GetComponent<PlayerStateManager>();
         jumpManager = GetComponent<JumpManager>();
         gravityScale = rb.gravityScale;
     }
@@ -36,23 +38,22 @@ public class Dash : MonoBehaviour
         }
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private void Dashing()
     {
-        if (states.viewSide == PlayerStates.Sides.right)
+        rb.linearVelocityX = _states.direction switch
         {
-            rb.linearVelocityX = dashSpeed;
-        }
-        else
-        {
-            rb.linearVelocityX = -dashSpeed;
-        }
+            ViewDirection.Right => dashSpeed,
+            ViewDirection.Left => -dashSpeed,
+            _ => rb.linearVelocityX
+        };
     }
 
-    public void StartDash()
+    private void StartDash()
     {
-        if (!states.dashIsUnlocked || !states.isCanDash) return;
-        states.isCanDash = false;
-        states.isCanMove = false;
+        // if (!_states.dashIsUnlocked || !_states.isCanDash) return;
+        // _states.isCanDash = false;
+        _states.isCanMove = false;
         rb.gravityScale = 0;
         timer = dashTime;
         isDashing = true;
@@ -61,14 +62,25 @@ public class Dash : MonoBehaviour
 
     private void EndDash()
     {
-        states.isCanMove = true;
+        _states.isCanMove = true;
         rb.gravityScale = gravityScale;
         isDashing = false;
+        Deactivate();
     }
 
     public void StopDash()
     {
         EndDash();
         timer = -1f;
+    }
+
+    protected override void OnActivate()
+    {
+        StartDash();
+    }
+
+    public override void Stop()
+    {
+        StopDash();
     }
 }

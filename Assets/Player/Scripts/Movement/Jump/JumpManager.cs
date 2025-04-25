@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent (typeof(PlayerStateManager))]
+[RequireComponent (typeof(PlayerStateOldManagerOld))]
 [RequireComponent (typeof(Move))]
 [RequireComponent (typeof(Jump), typeof(WallJump), typeof(AirJump))]
 public class JumpManager : MonoBehaviour
@@ -12,14 +12,14 @@ public class JumpManager : MonoBehaviour
     private Jump jump;
     private WallJump wallJump;
     private AirJump airJump;
-    private PlayerStateManager states;
+    private PlayerStateOldManagerOld _statesOld;
     private Move move;
     private float timer = 0f;
     private bool isEnded = false;
 
     private void Awake()
     {
-        states = GetComponent<PlayerStateManager>();
+        _statesOld = GetComponent<PlayerStateOldManagerOld>();
         jump = GetComponent<Jump>();
         wallJump = GetComponent<WallJump>();
         airJump = GetComponent<AirJump>();
@@ -31,7 +31,7 @@ public class JumpManager : MonoBehaviour
         if (timer > 0f)
         {
             timer -= Time.deltaTime;
-            if (states.isGrounded)
+            if (_statesOld.isGrounded)
             {
                 jump.StartJump();
                 timer = -1f;
@@ -46,16 +46,16 @@ public class JumpManager : MonoBehaviour
 
     public void StartJump()
     {
-        if ((states.isSlide == PlayerStates.Sides.none) && !move.CanWallJump())
+        if ((_statesOld.isSlide == PlayerStatesOld.Sides.none) && !move.CanWallJump())
         {
-            if (states.isGrounded)
+            if (_statesOld.isGrounded)
             {
                 jump.StartJump();
             }
-            else if (states.isCanAirJump)
+            else if (_statesOld.isCanAirJump)
             {
                 airJump.StartJump();
-                states.isCanAirJump = false;
+                _statesOld.isCanAirJump = false;
             }
             else
             {
@@ -70,15 +70,15 @@ public class JumpManager : MonoBehaviour
 
     public void EndJump()
     {
-        if (states.isJumped)
+        if (_statesOld.isJumped)
         {
             jump.EndJump();
         }
-        else if (states.isAirJumped)
+        else if (_statesOld.isAirJumped)
         {
             airJump.EndJump();
         }
-        else if (states.isWallJumped)
+        else if (_statesOld.isWallJumped)
         {
             wallJump.EndJump();
         }
@@ -91,7 +91,7 @@ public class JumpManager : MonoBehaviour
 
     public bool IsJumping()
     {
-        if (states.isJumped || states.isWallJumped || states.isAirJumped) return true;
+        if (_statesOld.isJumped || _statesOld.isWallJumped || _statesOld.isAirJumped) return true;
         return false;
     }
 
@@ -106,7 +106,7 @@ public class JumpManager : MonoBehaviour
     {
         if (!IsJumping()) return;
 
-        if (topCheck.IsTouchingLayers(groundLayer) && (states.isJumped || states.isWallJumped || states.isAirJumped))
+        if (topCheck.IsTouchingLayers(groundLayer) && (_statesOld.isJumped || _statesOld.isWallJumped || _statesOld.isAirJumped))
         {
             StopJump();
         }

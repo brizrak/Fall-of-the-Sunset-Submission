@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerStateManager : PlayerStates
+public class PlayerStateOldManagerOld : PlayerStatesOld
 {
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float coyoteTime;

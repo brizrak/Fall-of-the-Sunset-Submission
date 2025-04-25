@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerStates : MonoBehaviour
+public class PlayerStatesOld : MonoBehaviour
 {
     public bool isCanMove;
     public bool slideIsUnlocked;
