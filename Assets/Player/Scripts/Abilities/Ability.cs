@@ -39,11 +39,8 @@ namespace Player.Abilities
 
         protected abstract void OnActivate();
 
-        public void Deactivate()
-        {
-            _states.StopAbility();
-        }
+        protected void Deactivate() => _states.StopAbility(); 
 
-        public abstract void Stop();
+        public virtual void Stop() => Deactivate();
     }
 }

@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
 
         //Debug
         actions.Player.Stop.performed += context => jumpManager.StopJump();
-        actions.Player.Stop.performed += context => dash.StopDash();
+        actions.Player.Stop.performed += context => dash.Stop();
     }
 
     private void OnEnable()

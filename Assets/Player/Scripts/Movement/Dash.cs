@@ -8,79 +8,63 @@ public class Dash : Ability
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashTime;
 
-    private Rigidbody2D rb;
-    private JumpManager jumpManager;
-    private bool isDashing;
-    private float gravityScale;
-    private float timer;
+    private Rigidbody2D _rb;
+    private JumpManager _jumpManager;
+    private bool _isDashing;
+    private float _gravityScale;
+    private float _timer;
 
     protected override void Awake()
     {
         base.Awake();
         
-        rb = GetComponent<Rigidbody2D>();
-        jumpManager = GetComponent<JumpManager>();
-        gravityScale = rb.gravityScale;
+        _rb = GetComponent<Rigidbody2D>();
+        _jumpManager = GetComponent<JumpManager>();
+        _gravityScale = _rb.gravityScale;
     }
 
     private void FixedUpdate()
     {
-        if (!isDashing) return;
-        if (timer > 0)
+        if (!_isDashing) return;
+        if (_timer > 0)
         {
-            timer -= Time.fixedDeltaTime;
-            rb.linearVelocityY = 0;
+            _timer -= Time.fixedDeltaTime;
+            _rb.linearVelocityY = 0;
             Dashing();
         }
-        else
-        {
-            EndDash();
-        }
+        else EndDash();
     }
-
-    // ReSharper disable Unity.PerformanceAnalysis
+    
     private void Dashing()
     {
-        rb.linearVelocityX = _states.direction switch
+        _rb.linearVelocityX = _states.direction switch
         {
             ViewDirection.Right => dashSpeed,
             ViewDirection.Left => -dashSpeed,
-            _ => rb.linearVelocityX
+            _ => _rb.linearVelocityX
         };
     }
 
-    private void StartDash()
+    protected override void OnActivate()
     {
-        // if (!_states.dashIsUnlocked || !_states.isCanDash) return;
-        // _states.isCanDash = false;
         _states.isCanMove = false;
-        rb.gravityScale = 0;
-        timer = dashTime;
-        isDashing = true;
-        if (jumpManager.IsJumping()) jumpManager.StopJump();
+        _rb.gravityScale = 0;
+        _timer = dashTime;
+        _isDashing = true;
+        if (_jumpManager.IsJumping()) _jumpManager.StopJump();
     }
 
     private void EndDash()
     {
         _states.isCanMove = true;
-        rb.gravityScale = gravityScale;
-        isDashing = false;
+        _rb.gravityScale = _gravityScale;
+        _isDashing = false;
         Deactivate();
-    }
-
-    public void StopDash()
-    {
-        EndDash();
-        timer = -1f;
-    }
-
-    protected override void OnActivate()
-    {
-        StartDash();
     }
 
     public override void Stop()
     {
-        StopDash();
+        EndDash();
+        _timer = -1f;
     }
 }
