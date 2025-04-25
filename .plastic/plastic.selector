@@ -1,4 +1,0 @@
-repository "Fall of the Sunset/Fall of the Sunset@10171307394454@cloud"
-  path "/"
-    br "/main"
-    co "/main"
