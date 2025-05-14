@@ -5,18 +5,18 @@ namespace Player.Scripts.States
 {
     public class PlayerStates : MonoBehaviour
     {
-        [HideInInspector] public GroundState ground;
-        [HideInInspector] public MovementState movement;
-        [HideInInspector] public ViewDirection direction;
+        public Ground ground;
+        [HideInInspector] public Movement movement;
+        [HideInInspector] public Direction direction;
         /*[HideInInspector]*/ public bool isCanMove;
         public Ability currentAbility;
 
         private void Awake()
         {
             // Изменить на проверку
-            ground = GroundState.Grounded;
-            movement = MovementState.Idle;
-            direction = ViewDirection.Left;
+            ground = Ground.Grounded;
+            movement = Movement.Idle;
+            direction = Direction.Left;
             isCanMove = true;
             currentAbility = null;
         }

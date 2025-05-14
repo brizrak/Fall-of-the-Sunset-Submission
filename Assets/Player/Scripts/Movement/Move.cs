@@ -62,11 +62,11 @@ public class Move : MonoBehaviour
 
         if (moveInput.x < 0)
         {
-            _states.direction = ViewDirection.Left;
+            _states.direction = Direction.Left;
         }
         else if (moveInput.x > 0)
         {
-            _states.direction = ViewDirection.Right;
+            _states.direction = Direction.Right;
         }
     }
 

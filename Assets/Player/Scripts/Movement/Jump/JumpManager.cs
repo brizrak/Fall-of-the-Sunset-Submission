@@ -1,7 +1,7 @@
+using Player.Scripts.States;
 using UnityEngine;
 
-[RequireComponent (typeof(PlayerStateOldManagerOld))]
-[RequireComponent (typeof(Move))]
+[RequireComponent (typeof(PlayerStates), typeof(Move))]
 [RequireComponent (typeof(Jump), typeof(WallJump), typeof(AirJump))]
 public class JumpManager : MonoBehaviour
 {
@@ -9,106 +9,84 @@ public class JumpManager : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Collider2D topCheck;
 
-    private Jump jump;
-    private WallJump wallJump;
-    private AirJump airJump;
-    private PlayerStateOldManagerOld _statesOld;
-    private Move move;
-    private float timer = 0f;
-    private bool isEnded = false;
+    private Jump _jump;
+    private WallJump _wallJump;
+    private AirJump _airJump;
+    private PlayerStates _states;
+    private Move _move;
+    private float _timer = 0f;
+    private bool _isEnded = false;
 
     private void Awake()
     {
-        _statesOld = GetComponent<PlayerStateOldManagerOld>();
-        jump = GetComponent<Jump>();
-        wallJump = GetComponent<WallJump>();
-        airJump = GetComponent<AirJump>();
-        move = GetComponent<Move>();
+        _states = GetComponent<PlayerStates>();
+        _jump = GetComponent<Jump>();
+        _wallJump = GetComponent<WallJump>();
+        _airJump = GetComponent<AirJump>();
+        _move = GetComponent<Move>();
     }
 
     private void Update()
     {
-        if (timer > 0f)
-        {
-            timer -= Time.deltaTime;
-            if (_statesOld.isGrounded)
-            {
-                jump.StartJump();
-                timer = -1f;
-                if (isEnded)
-                {
-                    jump.EndJump();
-                    isEnded = false;
-                }
-            }
-        }
+        if (_timer <= 0f) return;
+        _timer -= Time.deltaTime;
+        if (_states.ground is not (Ground.Grounded or Ground.CoyoteTime)) return;
+        StartJump();
+        _timer = -1f;
+        if (!_isEnded) return;
+        EndJump();
+        _isEnded = false;
     }
 
     public void StartJump()
     {
-        if ((_statesOld.isSlide == PlayerStatesOld.Sides.none) && !move.CanWallJump())
+        if (/*_states.isSlide == PlayerStatesOld.Sides.none && !_move.CanWallJump()*/true) // add sliding
         {
-            if (_statesOld.isGrounded)
+            switch (_states.ground)
             {
-                jump.StartJump();
-            }
-            else if (_statesOld.isCanAirJump)
-            {
-                airJump.StartJump();
-                _statesOld.isCanAirJump = false;
-            }
-            else
-            {
-                timer = jumpBuffer;
+                case Ground.Grounded or Ground.CoyoteTime:
+                    _jump.StartJump();
+                    break;
+                case Ground.Falling:
+                    _airJump.StartJump();
+                    break;
+                default:
+                    _timer = jumpBuffer;
+                    break;
             }
         }
-        else
-        {
-            wallJump.StartJump();
-        }
+        else  _wallJump.StartJump();
     }
 
     public void EndJump()
     {
-        if (_statesOld.isJumped)
+        switch (_states.ground)
         {
-            jump.EndJump();
-        }
-        else if (_statesOld.isAirJumped)
-        {
-            airJump.EndJump();
-        }
-        else if (_statesOld.isWallJumped)
-        {
-            wallJump.EndJump();
+            case Ground.Jumping:
+                _jump.EndJump();
+                break;
+            // else if (_states.isAirJumped) _airJump.EndJump(); изменить если будет оставлен air jump
+            case Ground.WallJumping:
+                _wallJump.EndJump();
+                break;
         }
 
-        if (timer > 0f)
-        {
-            isEnded = true;
-        }
+        if (_timer > 0f) _isEnded = true;
     }
 
-    public bool IsJumping()
-    {
-        if (_statesOld.isJumped || _statesOld.isWallJumped || _statesOld.isAirJumped) return true;
-        return false;
-    }
+    public bool IsJumping() => _states.ground is (Ground.Jumping or Ground.WallJumping);
 
     public void StopJump()
     {
-        jump.StopJump();
-        airJump.StopJump();
-        wallJump.StopJump();
+        _jump.StopJump();
+        _airJump.StopJump();
+        _wallJump.StopJump();
     }
 
     private void FixedUpdate()
     {
         if (!IsJumping()) return;
 
-        if (topCheck.IsTouchingLayers(groundLayer) && (_statesOld.isJumped || _statesOld.isWallJumped || _statesOld.isAirJumped))
-        {
-            StopJump();
-        }
+        if (topCheck.IsTouchingLayers(groundLayer)) StopJump();
     }
 }

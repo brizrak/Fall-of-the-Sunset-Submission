@@ -39,8 +39,8 @@ public class Dash : Ability
     {
         _rb.linearVelocityX = _states.direction switch
         {
-            ViewDirection.Right => dashSpeed,
-            ViewDirection.Left => -dashSpeed,
+            Direction.Right => dashSpeed,
+            Direction.Left => -dashSpeed,
             _ => _rb.linearVelocityX
         };
     }

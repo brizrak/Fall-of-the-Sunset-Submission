@@ -11,14 +11,14 @@ namespace Player.Scripts.States
         [SerializeField] private Collider2D bottomCheck;
         [SerializeField] private float groundAngleLimit;
 
-        [HideInInspector] public PlayerStates states;
+        private PlayerStates _states;
         private float _coyoteTimeCounter;
         private int _groundContactCount = 0;
         private Coroutine _coyoteTimeRoutine;
 
         private void Awake()
         {
-            states = GetComponent<PlayerStates>();
+            _states = GetComponent<PlayerStates>();
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -32,7 +32,7 @@ namespace Player.Scripts.States
                 _coyoteTimeRoutine = null;
             }
 
-            states.ground = GroundState.Grounded;
+            _states.ground = Ground.Grounded;
         }
 
         private void OnCollisionExit2D(Collision2D collision)
@@ -47,9 +47,9 @@ namespace Player.Scripts.States
 
         private IEnumerator CoyoteTimeCountdown()
         {
-            states.ground = GroundState.CoyoteTime;
+            _states.ground = Ground.CoyoteTime;
             yield return new WaitForSeconds(coyoteTime);
-            states.ground = GroundState.Falling;
+            _states.ground = Ground.Falling;
             _coyoteTimeRoutine = null;
         }
 

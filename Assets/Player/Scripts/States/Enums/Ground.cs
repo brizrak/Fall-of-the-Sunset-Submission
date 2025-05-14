@@ -1,6 +1,6 @@
 ﻿namespace Player.Scripts.States
 {
-    public enum GroundState
+    public enum Ground
     {
         Falling = -1,
         CoyoteTime = 0,
