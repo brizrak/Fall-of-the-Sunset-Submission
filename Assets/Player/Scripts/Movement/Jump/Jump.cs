@@ -1,8 +1,10 @@
+using Player.Abilities;
 using Player.Scripts;
+using Player.Scripts.States;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(PlayerStateOldManagerOld))]
-public class Jump : MonoBehaviour
+[RequireComponent(typeof(Rigidbody2D), typeof(PlayerStates))]
+public class Jump : JumpAbility
 {
     [SerializeField] protected float startPush;
     [SerializeField] private float force;
@@ -10,43 +12,40 @@ public class Jump : MonoBehaviour
     [SerializeField] private float endPush;
     [SerializeField] private float stopPush;
 
-    protected Rigidbody2D rb;
-    protected PlayerStateOldManagerOld StatesOld;
+    protected Rigidbody2D _rb;
 
-    private float timer;
-    protected bool isStarting = false;
-    private bool isEndPushing = false;
-    protected bool isJumping = false;
-    private bool isEnding = false;
+    private float _timer;
+    protected bool _isStarting = false;
+    private bool _isEndPushing = false;
+    protected bool _isJumping = false;
+    private bool _isEnding = false;
 
-    protected virtual void IsJumping(bool jumping)
+    protected override void IsJumping(bool jumping)
     {
-        isJumping = jumping;
-        StatesOld.isJumped = jumping;
+        _isJumping = jumping;
+        _states.ground = Ground.Jumping;
     }
 
-    private void Awake()
+    protected override void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        StatesOld = GetComponent<PlayerStateOldManagerOld>();
+        base.Awake();
+        _rb = GetComponent<Rigidbody2D>();
     }
 
-
-    public virtual void StartJump()
+    protected override void OnActivate()
     {
-        rb.linearVelocityY = startPush;
-        isStarting = true;
-        IsJumping(true);
+        _rb.linearVelocityY = startPush;
+        _isStarting = true;
     }
 
     public void EndJump()
     {
-        if (isStarting)
+        if (_isStarting)
         {
-            isEnding = true;
+            _isEnding = true;
             return;
         }
-        if (isJumping && !isStarting && !isEndPushing)
+        if (_isJumping && !_isStarting && !_isEndPushing)
         {
             End();
         }
@@ -54,38 +53,38 @@ public class Jump : MonoBehaviour
 
     protected virtual void End()
     {
-        rb.linearVelocityY = endPush;
-        isEndPushing = true;
-        isEnding = false;
+        _rb.linearVelocityY = endPush;
+        _isEndPushing = true;
+        _isEnding = false;
     }
 
     protected virtual void FixedUpdate()
     {
-        if (!isJumping) return;
+        if (!_isJumping) return;
 
-        if (isStarting)
+        if (_isStarting)
         {
-            if (rb.linearVelocityY < force)
+            if (_rb.linearVelocityY < force)
             {
-                isStarting = false;
-                if (isEnding)
+                _isStarting = false;
+                if (_isEnding)
                 {
                     EndJump();
                 }
                 else
                 {
-                    timer = time;
+                    _timer = time;
                 }
                 
             }
         }
 
-        if (isJumping && !isStarting && !isEndPushing)
+        if (_isJumping && !_isStarting && !_isEndPushing)
         {
-            if (timer > 0)
+            if (_timer > 0)
             {
                 SetForce();
-                timer -= Time.fixedDeltaTime;
+                _timer -= Time.fixedDeltaTime;
             }
             else
             {
@@ -93,24 +92,24 @@ public class Jump : MonoBehaviour
             }
         }
 
-        if (rb.linearVelocityY <= 0 && isJumping)
+        if (_rb.linearVelocityY < 0 && _isJumping)
         {
             IsJumping(false);
-            isEndPushing = false;
+            _isEndPushing = false;
         }
     }
 
     protected virtual void SetForce()
     {
-        rb.linearVelocityY = force;
+        _rb.linearVelocityY = force;
     }
 
     public virtual void StopJump()
     {
-        rb.linearVelocityY = stopPush;
-        isStarting = false;
-        isEndPushing = false;
-        isEnding = false;
+        _rb.linearVelocityY = stopPush;
+        _isStarting = false;
+        _isEndPushing = false;
+        _isEnding = false;
         IsJumping(false);
     }
 }

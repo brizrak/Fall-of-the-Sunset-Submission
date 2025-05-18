@@ -5,31 +5,29 @@ namespace Player.Abilities
 {
     public abstract class Ability : MonoBehaviour
     {
-        [SerializeField] private AbilityData data;
+        // [SerializeField] private AbilityData data; // return or delete
         public bool isUnlock; // change
 
         [HideInInspector] public int priority;
-        private float _cooldown;
-        private float _lastUseTime;
+        [SerializeField] private float cooldown;
+        protected float _lastUseTime;
         protected PlayerStates _states;
 
         protected virtual void Awake()
         {
             _states = GetComponent<PlayerStates>();
-            _cooldown = data.cooldown;
-            priority = data.priority;
-            _lastUseTime = Time.time - _cooldown;
+            // _cooldown = data.cooldown;
+            // priority = data.priority;
+            _lastUseTime = Time.time - cooldown;
         }
 
-        private bool CanActivate()
+        protected bool CanActivate()
         {
-            Debug.Log(isUnlock && Time.time > _lastUseTime + _cooldown 
-                               && (_states.currentAbility == null || _states.currentAbility.priority <= priority));
-            return isUnlock && Time.time > _lastUseTime + _cooldown 
-                            && (_states.currentAbility == null || _states.currentAbility.priority <= priority); // == or is
+            return isUnlock && Time.time > _lastUseTime + cooldown 
+                            && (_states.GetPriority() > priority); // == or is
         }
 
-        public void TryActivate()
+        public virtual void TryActivate()
         {
             if (!CanActivate()) return;
             _lastUseTime = Time.time;
@@ -39,7 +37,7 @@ namespace Player.Abilities
 
         protected abstract void OnActivate();
 
-        protected void Deactivate() => _states.StopAbility(); 
+        protected void Deactivate() => _states.DeactivateAbility(); 
 
         public virtual void Stop() => Deactivate();
     }

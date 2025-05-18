@@ -8,15 +8,21 @@ public class WallJump : Jump
 
     private float sideStartPushSigned;
     private float sideForceSigned;
+    private PlayerStateOldManagerOld StatesOld;
 
-    public override void StartJump()
+    protected void Start()
+    {
+        StatesOld = GetComponent<PlayerStateOldManagerOld>();
+    }
+    
+    protected override void OnActivate()
     {
         SetSide();
         StatesOld.isCanMove = false;
-        rb.linearVelocityX = sideStartPushSigned;
+        _rb.linearVelocityX = sideStartPushSigned;
         StatesOld.isSlide = PlayerStatesOld.Sides.none;
 
-        base.StartJump();
+        base.OnActivate();
     }
 
     protected override void End()
@@ -30,9 +36,9 @@ public class WallJump : Jump
     {
         base.FixedUpdate();
 
-        if (isStarting && rb.linearVelocityX < math.abs(sideForceSigned))
+        if (_isStarting && _rb.linearVelocityX < math.abs(sideForceSigned))
         {
-            rb.linearVelocityX = sideForceSigned;
+            _rb.linearVelocityX = sideForceSigned;
         }
     }
 
@@ -40,12 +46,12 @@ public class WallJump : Jump
     {
         base.SetForce();
 
-        rb.linearVelocityX = sideForceSigned;
+        _rb.linearVelocityX = sideForceSigned;
     }
 
     protected override void IsJumping(bool jumped)
     {
-        isJumping = jumped;
+        _isJumping = jumped;
         StatesOld.isWallJumped = jumped;
     }
 

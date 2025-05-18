@@ -1419,7 +1419,7 @@ MonoBehaviour:
     m_Bits: 64
   coyoteTime: 0.1
   bottomCheck: {fileID: 824500289}
-  groundAngleLimit: 0
+  groundAngleLimit: 45
 --- !u!114 &2029115451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1432,7 +1432,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7276cc5c11e34849b023e95c858f7111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashPriority: 1
+  dashPriority: 2
+  jumpPriority: 3
+  wallJumpPriority: 3
 --- !u!1 &2113423940
 GameObject:
   m_ObjectHideFlags: 0
@@ -1575,6 +1577,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 49963004840619960, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: isUnlock
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1742860638901132716, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.006
+      objectReference: {fileID: 0}
+    - target: {fileID: 2557931971536049483, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2588614431073283888, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -1588,6 +1602,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: c525b7e55f8589d4e8381c48d5617b80, type: 2}
     - target: {fileID: 5009351342496095646, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: cooldown
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5009351342496095646, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
       propertyPath: isUnlock
       value: 1
       objectReference: {fileID: 0}
@@ -1595,6 +1613,10 @@ PrefabInstance:
       propertyPath: topCheck
       value: 
       objectReference: {fileID: 62451179}
+    - target: {fileID: 7944659958417537481, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: jumpBuffer
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 7944659958417537481, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
       propertyPath: groundLayer.m_Bits
       value: 64
@@ -1639,8 +1661,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2588614431073283888, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

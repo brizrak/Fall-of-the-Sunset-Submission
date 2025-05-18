@@ -2,7 +2,7 @@ using Player.Scripts.States;
 using UnityEngine;
 
 [RequireComponent (typeof(PlayerStates), typeof(Move))]
-[RequireComponent (typeof(Jump), typeof(WallJump), typeof(AirJump))]
+[RequireComponent (typeof(Jump), typeof(WallJump))]
 public class JumpManager : MonoBehaviour
 {
     [SerializeField] private float jumpBuffer;
@@ -11,9 +11,7 @@ public class JumpManager : MonoBehaviour
 
     private Jump _jump;
     private WallJump _wallJump;
-    private AirJump _airJump;
     private PlayerStates _states;
-    private Move _move;
     private float _timer = 0f;
     private bool _isEnded = false;
 
@@ -22,8 +20,6 @@ public class JumpManager : MonoBehaviour
         _states = GetComponent<PlayerStates>();
         _jump = GetComponent<Jump>();
         _wallJump = GetComponent<WallJump>();
-        _airJump = GetComponent<AirJump>();
-        _move = GetComponent<Move>();
     }
 
     private void Update()
@@ -42,20 +38,10 @@ public class JumpManager : MonoBehaviour
     {
         if (/*_states.isSlide == PlayerStatesOld.Sides.none && !_move.CanWallJump()*/true) // add sliding
         {
-            switch (_states.ground)
-            {
-                case Ground.Grounded or Ground.CoyoteTime:
-                    _jump.StartJump();
-                    break;
-                case Ground.Falling:
-                    _airJump.StartJump();
-                    break;
-                default:
-                    _timer = jumpBuffer;
-                    break;
-            }
+            if (_states.ground is (Ground.Grounded or Ground.CoyoteTime)) _jump.TryActivate();
+            else _timer = jumpBuffer;
         }
-        else  _wallJump.StartJump();
+        // else  _wallJump.StartJump();
     }
 
     public void EndJump()
@@ -65,7 +51,6 @@ public class JumpManager : MonoBehaviour
             case Ground.Jumping:
                 _jump.EndJump();
                 break;
-            // else if (_states.isAirJumped) _airJump.EndJump(); изменить если будет оставлен air jump
             case Ground.WallJumping:
                 _wallJump.EndJump();
                 break;
@@ -79,7 +64,6 @@ public class JumpManager : MonoBehaviour
     public void StopJump()
     {
         _jump.StopJump();
-        _airJump.StopJump();
         _wallJump.StopJump();
     }
 
@@ -88,5 +72,15 @@ public class JumpManager : MonoBehaviour
         if (!IsJumping()) return;
 
         if (topCheck.IsTouchingLayers(groundLayer)) StopJump();
+    }
+
+    public int? GetPriority()
+    {
+        return _states.ground switch
+        {
+            Ground.Jumping => _jump.priority,
+            Ground.WallJumping => _wallJump.priority,
+            _ => null
+        };
     }
 }

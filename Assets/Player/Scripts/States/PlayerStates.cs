@@ -5,11 +5,15 @@ namespace Player.Scripts.States
 {
     public class PlayerStates : MonoBehaviour
     {
-        public Ground ground;
+        /*[HideInInspector]*/ public Ground ground;
         [HideInInspector] public Movement movement;
         [HideInInspector] public Direction direction;
         /*[HideInInspector]*/ public bool isCanMove;
-        public Ability currentAbility;
+        /*[HideInInspector]*/ public Ability currentAbility;
+        
+        private JumpManager _jumpManager;
+        private AbilityList _abilityList;
+        private int _priorityLimit;
 
         private void Awake()
         {
@@ -19,6 +23,18 @@ namespace Player.Scripts.States
             direction = Direction.Left;
             isCanMove = true;
             currentAbility = null;
+            _jumpManager = GetComponent<JumpManager>();
+            _abilityList = GetComponent<AbilityList>();
+        }
+
+        private void Start()
+        {
+            _priorityLimit = _abilityList.GetMaxPriority + 1;
+        }
+
+        public int GetPriority()
+        {
+            return currentAbility?.priority ?? _jumpManager.GetPriority() ?? _priorityLimit;
         }
 
         public void ChangeAbility(Ability ability)
@@ -27,8 +43,14 @@ namespace Player.Scripts.States
             currentAbility = ability;
         }
 
+        public void DeactivateAbility()
+        {
+            currentAbility = null;
+        }
+
         public void StopAbility()
         {
+            currentAbility?.Stop(); 
             currentAbility = null;
         }
     }

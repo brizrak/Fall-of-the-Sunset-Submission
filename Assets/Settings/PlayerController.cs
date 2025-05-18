@@ -3,38 +3,38 @@ using UnityEngine;
 [RequireComponent(typeof(Move), typeof(JumpManager), typeof(Dash))]
 public class PlayerController : MonoBehaviour
 {
-    private InputSystemActions actions;
-    private Move playerMove;
-    private JumpManager jumpManager;
-    private Dash dash;
+    private InputSystemActions _actions;
+    private Move _playerMove;
+    private JumpManager _jumpManager;
+    private Dash _dash;
 
     private void Awake()
     {
-        actions = new InputSystemActions();
-        playerMove = GetComponent<Move>();
-        jumpManager = GetComponent<JumpManager>();
-        dash = GetComponent<Dash>();
+        _actions = new InputSystemActions();
+        _playerMove = GetComponent<Move>();
+        _jumpManager = GetComponent<JumpManager>();
+        _dash = GetComponent<Dash>();
 
-        actions.Player.Jump.performed += context => jumpManager.StartJump();
-        actions.Player.Jump.canceled += context => jumpManager.EndJump();
+        _actions.Player.Jump.performed += context => _jumpManager.StartJump();
+        _actions.Player.Jump.canceled += context => _jumpManager.EndJump();
 
-        actions.Player.Move.performed += context => playerMove.MoveInput(context.ReadValue<Vector2>());
-        actions.Player.Move.canceled += context => playerMove.MoveInput(Vector2.zero);
+        _actions.Player.Move.performed += context => _playerMove.MoveInput(context.ReadValue<Vector2>());
+        _actions.Player.Move.canceled += context => _playerMove.MoveInput(Vector2.zero);
 
-        actions.Player.Dash.performed += context => dash.TryActivate();
+        _actions.Player.Dash.performed += context => _dash.TryActivate();
 
         //Debug
-        actions.Player.Stop.performed += context => jumpManager.StopJump();
-        actions.Player.Stop.performed += context => dash.Stop();
+        _actions.Player.Stop.performed += context => _jumpManager.StopJump();
+        _actions.Player.Stop.performed += context => _dash.Stop();
     }
 
     private void OnEnable()
     {
-        actions.Enable();
+        _actions.Enable();
     }
 
     private void OnDisable()
     {
-        actions.Disable();
+        _actions.Disable();
     }
 }
