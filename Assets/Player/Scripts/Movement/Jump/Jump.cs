@@ -23,7 +23,7 @@ public class Jump : JumpAbility
     protected override void IsJumping(bool jumping)
     {
         _isJumping = jumping;
-        _states.ground = Ground.Jumping;
+        _states.ground = jumping ? Ground.Jumping : Ground.Falling;
     }
 
     protected override void Awake()
@@ -104,7 +104,7 @@ public class Jump : JumpAbility
         _rb.linearVelocityY = force;
     }
 
-    public virtual void StopJump()
+    public override void Stop()
     {
         _rb.linearVelocityY = stopPush;
         _isStarting = false;

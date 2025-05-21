@@ -23,8 +23,7 @@ namespace Player.Abilities
 
         protected bool CanActivate()
         {
-            return isUnlock && Time.time > _lastUseTime + cooldown 
-                            && (_states.GetPriority() > priority); // == or is
+            return isUnlock && Time.time > _lastUseTime + cooldown && _states.GetPriority() > priority;
         }
 
         public virtual void TryActivate()
@@ -39,6 +38,6 @@ namespace Player.Abilities
 
         protected void Deactivate() => _states.DeactivateAbility(); 
 
-        public virtual void Stop() => Deactivate();
+        public abstract void Stop();
     }
 }

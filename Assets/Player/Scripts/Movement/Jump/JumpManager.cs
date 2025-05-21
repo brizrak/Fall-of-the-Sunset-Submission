@@ -36,12 +36,12 @@ public class JumpManager : MonoBehaviour
 
     public void StartJump()
     {
-        if (/*_states.isSlide == PlayerStatesOld.Sides.none && !_move.CanWallJump()*/true) // add sliding
+        if (_states.ground is not Ground.Sliding/* && !_move.CanWallJump()*/) // add sliding
         {
             if (_states.ground is (Ground.Grounded or Ground.CoyoteTime)) _jump.TryActivate();
             else _timer = jumpBuffer;
         }
-        // else  _wallJump.StartJump();
+        else  _wallJump.TryActivate();
     }
 
     public void EndJump()
@@ -63,8 +63,15 @@ public class JumpManager : MonoBehaviour
 
     public void StopJump()
     {
-        _jump.StopJump();
-        _wallJump.StopJump();
+        switch (_states.ground)
+        {
+            case Ground.Jumping:
+                _jump.Stop();
+                break;
+            case Ground.WallJumping:
+                _wallJump.Stop();
+                break;
+        }
     }
 
     private void FixedUpdate()

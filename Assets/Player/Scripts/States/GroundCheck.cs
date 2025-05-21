@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Settings;
 using UnityEngine;
@@ -18,16 +19,19 @@ namespace Player.Scripts.States
         private int _groundContactCount = 0;
         private Coroutine _coyoteTimeRoutine;
         private bool _isStopping;
+        private HashSet<Collider2D> _colliders;
 
         private void Awake()
         {
             _states = GetComponent<PlayerStates>();
             _isStopping = false;
+            _colliders = new HashSet<Collider2D>();
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.gameObject.layer != groundLayer && !EvaluateCollision(collision)) return;
+            if (!LayerComparison(groundLayer, collision.gameObject.layer) || !EvaluateCollision(collision)) return;
+            if (!_colliders.Add(collision.collider)) return;
             _groundContactCount++;
 
             if (_coyoteTimeRoutine != null)
@@ -45,7 +49,8 @@ namespace Player.Scripts.States
             if (EditorShutdownTracker.IsExitingPlayMode) return;
 #endif
             if (_isStopping) return;
-            if (collision.gameObject.layer != groundLayer && !EvaluateCollision(collision)) return;
+            if (!LayerComparison(groundLayer, collision.gameObject.layer)) return;
+            if (!_colliders.Remove(collision.collider)) return;
             _groundContactCount--;
 
             if (_groundContactCount > 0) return;
@@ -64,7 +69,7 @@ namespace Player.Scripts.States
 
         private bool EvaluateCollision(Collision2D collision)
         {
-            return collision.contacts.All(contact => Vector2.Angle(contact.normal, Vector2.up) < groundAngleLimit); // maybe Any
+            return collision.contacts.Any(contact => Vector2.Angle(contact.normal, Vector2.up) < groundAngleLimit);
         }
 
         private void OnDisable()
@@ -77,6 +82,11 @@ namespace Player.Scripts.States
         private void OnApplicationQuit()
         {
             _isStopping = true;
+        }
+
+        private static bool LayerComparison(LayerMask mask, int layer)
+        {
+            return (mask.value & (1 << layer)) != 0;
         }
     }
 }

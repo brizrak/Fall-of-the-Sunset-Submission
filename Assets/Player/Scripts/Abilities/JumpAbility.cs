@@ -7,8 +7,8 @@ namespace Player.Abilities
         public override void TryActivate()
         {
             if (!CanActivate()) return;
-            _lastUseTime = Time.time;
             _states.StopAbility();
+            _lastUseTime = Time.time;
             IsJumping(true);
             OnActivate();
         }

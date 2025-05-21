@@ -7,5 +7,6 @@
         Grounded = 1,
         Jumping = 2,
         WallJumping = 3,
+        Sliding = 4,
     }
 }

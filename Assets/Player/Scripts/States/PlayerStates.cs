@@ -6,8 +6,8 @@ namespace Player.Scripts.States
     public class PlayerStates : MonoBehaviour
     {
         /*[HideInInspector]*/ public Ground ground;
-        [HideInInspector] public Movement movement;
-        [HideInInspector] public Direction direction;
+        /*[HideInInspector]*/ public Movement movement;
+        /*[HideInInspector]*/ public Direction direction;
         /*[HideInInspector]*/ public bool isCanMove;
         /*[HideInInspector]*/ public Ability currentAbility;
         
@@ -39,6 +39,7 @@ namespace Player.Scripts.States
 
         public void ChangeAbility(Ability ability)
         {
+            _jumpManager.StopJump();
             currentAbility?.Stop();
             currentAbility = ability;
         }

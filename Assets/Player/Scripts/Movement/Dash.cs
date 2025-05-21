@@ -51,7 +51,6 @@ public class Dash : Ability
         _rb.gravityScale = 0;
         _timer = dashTime;
         _isDashing = true;
-        if (_jumpManager.IsJumping()) _jumpManager.StopJump();
     }
 
     private void EndDash()

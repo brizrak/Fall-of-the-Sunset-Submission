@@ -8,6 +8,7 @@ namespace Player.Abilities
     {
         [SerializeField] private int dashPriority;
         [SerializeField] private int jumpPriority;
+        [SerializeField] private int slidePriority;
         [SerializeField] private int wallJumpPriority;
 
         private List<Ability> _abilities;
@@ -23,6 +24,9 @@ namespace Player.Abilities
 
             var jump = _abilities.Find(a => a is Jump);
             jump.priority = jumpPriority;
+
+            var slide = _abilities.Find(a => a is Slide);
+            slide.priority = slidePriority;
 
             var wallJump = _abilities.Find(a => a is WallJump);
             wallJump.priority = wallJumpPriority;

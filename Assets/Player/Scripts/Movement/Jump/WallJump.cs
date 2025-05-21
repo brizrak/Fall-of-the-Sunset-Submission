@@ -1,3 +1,4 @@
+using Player.Scripts.States;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -6,21 +7,15 @@ public class WallJump : Jump
     [SerializeField] private float sideStartPush;
     [SerializeField] private float sideForce;
 
-    private float sideStartPushSigned;
-    private float sideForceSigned;
-    private PlayerStateOldManagerOld StatesOld;
-
-    protected void Start()
-    {
-        StatesOld = GetComponent<PlayerStateOldManagerOld>();
-    }
+    private float _sideStartPushSigned;
+    private float _sideForceSigned;
     
     protected override void OnActivate()
     {
         SetSide();
-        StatesOld.isCanMove = false;
-        _rb.linearVelocityX = sideStartPushSigned;
-        StatesOld.isSlide = PlayerStatesOld.Sides.none;
+        _states.isCanMove = false;
+        _rb.linearVelocityX = _sideStartPushSigned;
+        // _states.isSlide = PlayerStatesOld.Sides.none; // ?
 
         base.OnActivate();
     }
@@ -29,16 +24,16 @@ public class WallJump : Jump
     {
         base.End();
 
-        StatesOld.isCanMove = true;
+        _states.isCanMove = true;
     }
 
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
 
-        if (_isStarting && _rb.linearVelocityX < math.abs(sideForceSigned))
+        if (_isStarting && _rb.linearVelocityX < sideForce)
         {
-            _rb.linearVelocityX = sideForceSigned;
+            _rb.linearVelocityX = _sideForceSigned;
         }
     }
 
@@ -46,33 +41,34 @@ public class WallJump : Jump
     {
         base.SetForce();
 
-        _rb.linearVelocityX = sideForceSigned;
+        _rb.linearVelocityX = _sideForceSigned;
     }
 
-    protected override void IsJumping(bool jumped)
+    protected override void IsJumping(bool jumping)
     {
-        _isJumping = jumped;
-        StatesOld.isWallJumped = jumped;
+        _isJumping = jumping;
+        _states.ground = jumping ? Ground.WallJumping : Ground.Falling;
     }
 
     private void SetSide()
     {
-        if (StatesOld.isSlide == PlayerStatesOld.Sides.right)
+        switch (_states.direction)
         {
-            sideStartPushSigned = -sideStartPush;
-            sideForceSigned = -sideForce;
-        }
-        else if (StatesOld.isSlide == PlayerStatesOld.Sides.left)
-        {
-            sideStartPushSigned = sideStartPush;
-            sideForceSigned = sideForce;
+            case Direction.Right:
+                _sideStartPushSigned = -sideStartPush;
+                _sideForceSigned = -sideForce;
+                break;
+            case Direction.Left:
+                _sideStartPushSigned = sideStartPush;
+                _sideForceSigned = sideForce;
+                break;
         }
     }
 
-    public override void StopJump()
+    public override void Stop()
     {
-        base.StopJump();
+        base.Stop();
 
-        StatesOld.isCanMove = true;
+        _states.isCanMove = true;
     }
 }
