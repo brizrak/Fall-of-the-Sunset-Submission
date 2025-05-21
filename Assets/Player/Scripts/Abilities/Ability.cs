@@ -20,12 +20,13 @@ namespace Player.Abilities
 
         protected bool CanActivate()
         {
-            return isUnlock && Time.time > _lastUseTime + cooldown && _states.GetPriority() > priority;
+            return isUnlock && Time.time > _lastUseTime + cooldown && _states.GetPriority() > priority && CustomCheck();
         }
 
         public virtual void TryActivate()
         {
             if (!CanActivate()) return;
+            PreActivateAction();
             _lastUseTime = Time.time;
             _states.ChangeAbility(this);
             OnActivate();
@@ -36,5 +37,9 @@ namespace Player.Abilities
         protected void Deactivate() => _states.DeactivateAbility(); 
 
         public abstract void Stop();
+
+        protected virtual bool CustomCheck() => true;
+
+        protected virtual void PreActivateAction() {}
     }
 }

@@ -1,5 +1,4 @@
 using Player.Scripts.States;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class WallJump : Jump
@@ -9,13 +8,19 @@ public class WallJump : Jump
 
     private float _sideStartPushSigned;
     private float _sideForceSigned;
-    
+    private Slide _slide;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _slide = GetComponent<Slide>();
+    }
+
     protected override void OnActivate()
     {
         SetSide();
         _states.isCanMove = false;
         _rb.linearVelocityX = _sideStartPushSigned;
-        // _states.isSlide = PlayerStatesOld.Sides.none; // ?
 
         base.OnActivate();
     }
@@ -52,7 +57,7 @@ public class WallJump : Jump
 
     private void SetSide()
     {
-        switch (_states.direction)
+        switch (_slide.direction)
         {
             case Direction.Right:
                 _sideStartPushSigned = -sideStartPush;
@@ -70,5 +75,10 @@ public class WallJump : Jump
         base.Stop();
 
         _states.isCanMove = true;
+    }
+
+    protected override bool CustomCheck()
+    {
+        return _slide.CanWallJump();
     }
 }

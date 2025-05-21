@@ -12,6 +12,7 @@ public class JumpManager : MonoBehaviour
     private Jump _jump;
     private WallJump _wallJump;
     private PlayerStates _states;
+    private Slide _slide;
     private float _timer = 0f;
     private bool _isEnded = false;
 
@@ -20,6 +21,7 @@ public class JumpManager : MonoBehaviour
         _states = GetComponent<PlayerStates>();
         _jump = GetComponent<Jump>();
         _wallJump = GetComponent<WallJump>();
+        _slide = GetComponent<Slide>();
     }
 
     private void Update()
@@ -36,7 +38,7 @@ public class JumpManager : MonoBehaviour
 
     public void StartJump()
     {
-        if (_states.ground is not Ground.Sliding/* && !_move.CanWallJump()*/) // add sliding
+        if (_states.ground is not Ground.Sliding && !_slide.CanWallJump())
         {
             if (_states.ground is (Ground.Grounded or Ground.CoyoteTime)) _jump.TryActivate();
             else _timer = jumpBuffer;

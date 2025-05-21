@@ -9,17 +9,17 @@ public class Dash : Ability
     [SerializeField] private float dashTime;
 
     private Rigidbody2D _rb;
-    private JumpManager _jumpManager;
     private bool _isDashing;
     private float _gravityScale;
     private float _timer;
+    private bool _isReverse;
+    private float _currentSpeed;
 
     protected override void Awake()
     {
         base.Awake();
         
         _rb = GetComponent<Rigidbody2D>();
-        _jumpManager = GetComponent<JumpManager>();
         _gravityScale = _rb.gravityScale;
     }
 
@@ -37,16 +37,23 @@ public class Dash : Ability
     
     private void Dashing()
     {
-        _rb.linearVelocityX = _states.direction switch
+        _rb.linearVelocityX = _currentSpeed;
+    }
+
+    private void SetSpeed()
+    {
+        _currentSpeed = _states.direction switch
         {
             Direction.Right => dashSpeed,
             Direction.Left => -dashSpeed,
             _ => _rb.linearVelocityX
         };
+        if (_isReverse) _currentSpeed = -_currentSpeed;
     }
 
     protected override void OnActivate()
     {
+        SetSpeed();
         _states.isCanMove = false;
         _rb.gravityScale = 0;
         _timer = dashTime;
@@ -65,5 +72,10 @@ public class Dash : Ability
     {
         EndDash();
         _timer = -1f;
+    }
+
+    protected override void PreActivateAction()
+    {
+        _isReverse = _states.currentAbility is Slide or WallJump;
     }
 }

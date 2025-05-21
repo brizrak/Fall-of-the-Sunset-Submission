@@ -1625,6 +1625,14 @@ PrefabInstance:
       propertyPath: slideSpeed
       value: -3
       objectReference: {fileID: 0}
+    - target: {fileID: 7632173317668529933, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: slideBuffer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7632173317668529933, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: wallJumpBuffer
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 8471311258536505833, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.28

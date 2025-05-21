@@ -5,7 +5,9 @@ using UnityEngine;
 public class Slide : Ability
 {
     [SerializeField] private float slideSpeed;
-    [SerializeField] private float slideBuffer;
+    [SerializeField] private float wallJumpBuffer;
+
+    [HideInInspector] public Direction direction;
     
     private Rigidbody2D _rb;
     private CheckForTouch _checkForTouch;
@@ -23,6 +25,7 @@ public class Slide : Ability
     {
         _states.ground = Ground.Sliding;
         _sliding = _states.direction;
+        direction = _states.direction;
     }
 
     private void FixedUpdate()
@@ -38,7 +41,7 @@ public class Slide : Ability
         {
             Deactivate();
             Stop();
-            _bufferTimer = slideBuffer;
+            _bufferTimer = wallJumpBuffer;
         }
         else if (_states.ground == Ground.Grounded)
         {
@@ -56,19 +59,19 @@ public class Slide : Ability
 
     private void SlideBufferTimer()
     {
-        if (_bufferTimer > slideBuffer) return;
-        if (_bufferTimer > 0)
+        if (_bufferTimer > wallJumpBuffer) return;
+        if (_bufferTimer > 0 && _states.ground is not Ground.Grounded)
         {
             _bufferTimer -= Time.fixedDeltaTime;
         }
         else
         {
-            _bufferTimer = slideBuffer + 1f;
+            _bufferTimer = wallJumpBuffer + 1f;
         }
     }
 
     public bool CanWallJump()
     {
-        return _bufferTimer > 0 && _bufferTimer <= slideBuffer;
+        return _sliding is not null || (_bufferTimer > 0 && _bufferTimer <= wallJumpBuffer);
     }
 }
