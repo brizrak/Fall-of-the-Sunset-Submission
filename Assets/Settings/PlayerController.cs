@@ -1,40 +1,45 @@
 using UnityEngine;
+using Player.Movement;
 
-[RequireComponent(typeof(Move), typeof(JumpManager), typeof(Dash))]
-public class PlayerController : MonoBehaviour
+namespace Settings
 {
-    private InputSystemActions _actions;
-    private Move _playerMove;
-    private JumpManager _jumpManager;
-    private Dash _dash;
-
-    private void Awake()
+    [RequireComponent(typeof(InputSystemActions))]
+    [RequireComponent(typeof(Move), typeof(JumpManager), typeof(Dash))]
+    public class PlayerController : MonoBehaviour
     {
-        _actions = new InputSystemActions();
-        _playerMove = GetComponent<Move>();
-        _jumpManager = GetComponent<JumpManager>();
-        _dash = GetComponent<Dash>();
+        private InputSystemActions _actions;
+        private Move _playerMove;
+        private JumpManager _jumpManager;
+        private Dash _dash;
 
-        _actions.Player.Jump.performed += context => _jumpManager.StartJump();
-        _actions.Player.Jump.canceled += context => _jumpManager.EndJump();
+        private void Awake()
+        {
+            _actions = new InputSystemActions();
+            _playerMove = GetComponent<Move>();
+            _jumpManager = GetComponent<JumpManager>();
+            _dash = GetComponent<Dash>();
 
-        _actions.Player.Move.performed += context => _playerMove.MoveInput(context.ReadValue<Vector2>());
-        _actions.Player.Move.canceled += context => _playerMove.MoveInput(Vector2.zero);
+            _actions.Player.Jump.performed += context => _jumpManager.StartJump();
+            _actions.Player.Jump.canceled += context => _jumpManager.EndJump();
 
-        _actions.Player.Dash.performed += context => _dash.TryActivate();
+            _actions.Player.Move.performed += context => _playerMove.MoveInput(context.ReadValue<Vector2>());
+            _actions.Player.Move.canceled += context => _playerMove.MoveInput(Vector2.zero);
 
-        //Debug
-        _actions.Player.Stop.performed += context => _jumpManager.StopJump();
-        _actions.Player.Stop.performed += context => _dash.Stop();
-    }
+            _actions.Player.Dash.performed += context => _dash.TryActivate();
 
-    private void OnEnable()
-    {
-        _actions.Enable();
-    }
+            //Debug
+            _actions.Player.Stop.performed += context => _jumpManager.StopJump();
+            _actions.Player.Stop.performed += context => _dash.Stop();
+        }
 
-    private void OnDisable()
-    {
-        _actions.Disable();
+        private void OnEnable()
+        {
+            _actions.Enable();
+        }
+
+        private void OnDisable()
+        {
+            _actions.Disable();
+        }
     }
 }

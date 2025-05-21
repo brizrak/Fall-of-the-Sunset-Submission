@@ -1,68 +1,73 @@
 using System;
-using Player.Scripts.States;
 using UnityEngine;
+using Player.States;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(PlayerStates))]
-public class Move : MonoBehaviour
+namespace Player.Movement
 {
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float acceleration;
-    [SerializeField] private float deceleration;
-    [SerializeField] private float maxFallSpeed;
-
-    private Rigidbody2D _rb;
-    private PlayerStates _states;
-    private float _currentSpeed;
-    private float _currentAcceleration;
-    private Vector2 _moveInput;
-    public void MoveInput(Vector2 moveInput) { this._moveInput = moveInput; }
-
-    private void Awake()
+    [RequireComponent(typeof(Rigidbody2D), typeof(PlayerStates))]
+    public class Move : MonoBehaviour
     {
-        _rb = GetComponent<Rigidbody2D>();
-        _states = GetComponent<PlayerStates>();
-    }
+        [SerializeField] private float moveSpeed;
+        [SerializeField] private float acceleration;
+        [SerializeField] private float deceleration;
+        [SerializeField] private float maxFallSpeed;
 
-    private void FixedUpdate()
-    {
-        PlayerMove();
-        MaxFallSpeed();
-        MoveSide();
-    }
+        private Rigidbody2D _rb;
+        private PlayerStates _states;
+        private float _currentSpeed;
+        private float _currentAcceleration;
+        private Vector2 _moveInput;
+        public void MoveInput(Vector2 moveInput) => _moveInput = moveInput;
 
-    private void PlayerMove()
-    {
-        if (!_states.isCanMove) {
-            _currentSpeed = 0;
-            _states.movement = Movement.Idle;
-            return;
+        private void Awake()
+        {
+            _rb = GetComponent<Rigidbody2D>();
+            _states = GetComponent<PlayerStates>();
         }
 
-        _states.movement = _moveInput.x == 0 ? Movement.Idle : Movement.Walk;
-        _currentAcceleration = _moveInput.x != 0 ? acceleration : deceleration;
-
-        _currentSpeed = Mathf.MoveTowards(_currentSpeed, Math.Sign(_moveInput.x), _currentAcceleration * Time.fixedDeltaTime);
-
-        _rb.linearVelocityX = _currentSpeed * moveSpeed;
-    }
-
-    private void MoveSide()
-    {
-        if (!_states.isCanMove) return;
-
-        _states.direction = _moveInput.x switch
+        private void FixedUpdate()
         {
-            < 0 => Direction.Left,
-            > 0 => Direction.Right,
-            _ => _states.direction
-        };
-    }
+            PlayerMove();
+            MaxFallSpeed();
+            MoveSide();
+        }
 
-    private void MaxFallSpeed()
-    {
-        if (_rb.linearVelocityY < maxFallSpeed)
+        private void PlayerMove()
         {
-            _rb.linearVelocityY = maxFallSpeed;
+            if (!_states.isCanMove)
+            {
+                _currentSpeed = 0;
+                _states.moving = Moving.Idle;
+                return;
+            }
+
+            _states.moving = _moveInput.x == 0 ? Moving.Idle : Moving.Walk;
+            _currentAcceleration = _moveInput.x != 0 ? acceleration : deceleration;
+
+            _currentSpeed = Mathf.MoveTowards(_currentSpeed, Math.Sign(_moveInput.x),
+                _currentAcceleration * Time.fixedDeltaTime);
+
+            _rb.linearVelocityX = _currentSpeed * moveSpeed;
+        }
+
+        private void MoveSide()
+        {
+            if (!_states.isCanMove) return;
+
+            _states.direction = _moveInput.x switch
+            {
+                < 0 => Direction.Left,
+                > 0 => Direction.Right,
+                _ => _states.direction
+            };
+        }
+
+        private void MaxFallSpeed()
+        {
+            if (_rb.linearVelocityY < maxFallSpeed)
+            {
+                _rb.linearVelocityY = maxFallSpeed;
+            }
         }
     }
 }

@@ -1,37 +1,41 @@
 using UnityEngine;
-using Player.Scripts.States;
+using Player.States;
 
-public class SlideManager : MonoBehaviour
+namespace Player.Movement
 {
-    private PlayerStates _states;
-    private Slide _slide;
-    private CheckForTouch _checkForTouch;
-    private Direction? _direction;
-
-    private void Awake()
+    [RequireComponent(typeof(Slide), typeof(PlayerStates))]
+    public class SlideManager : MonoBehaviour
     {
-        _states = GetComponent<PlayerStates>();
-        _slide = GetComponent<Slide>();
-        _checkForTouch = GetComponent<CheckForTouch>();
-    }
+        private PlayerStates _states;
+        private Slide _slide;
+        private CheckForTouch _checkForTouch;
+        private Direction? _direction;
 
-    private void FixedUpdate()
-    {
-        CheckForSlide();
-    }
-
-    private void CheckForSlide()
-    {
-        if (!_states.isCanMove) return;
-        if ((_states.ground is not Ground.Falling) || (_states.movement is not Movement.Walk)) return;
-
-        _direction = _checkForTouch.IsTouchingWall();
-        // if (_direction is null) return; // optimization?
-
-        if (_states.direction == Direction.Left && _direction is Direction.Left ||
-            _states.direction == Direction.Right && _direction is Direction.Right)
+        private void Awake()
         {
-            _slide.TryActivate();
+            _states = GetComponent<PlayerStates>();
+            _slide = GetComponent<Slide>();
+            _checkForTouch = GetComponent<CheckForTouch>();
+        }
+
+        private void FixedUpdate()
+        {
+            CheckForSlide();
+        }
+
+        private void CheckForSlide()
+        {
+            if (!_states.isCanMove) return;
+            if ((_states.ground is not Ground.Falling) || (_states.moving is not Moving.Walk)) return;
+
+            _direction = _checkForTouch.IsTouchingWall();
+            // if (_direction is null) return; // optimization?
+
+            if (_states.direction == Direction.Left && _direction is Direction.Left ||
+                _states.direction == Direction.Right && _direction is Direction.Right)
+            {
+                _slide.TryActivate();
+            }
         }
     }
 }

@@ -1,26 +1,29 @@
 using UnityEngine;
-using Player.Scripts.States;
+using Player.States;
 
-public class CheckForTouch : MonoBehaviour
+namespace Player.Movement
 {
-    [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private Collider2D leftBotCheck;
-    [SerializeField] private Collider2D leftTopCheck;
-    [SerializeField] private Collider2D rightBotCheck;
-    [SerializeField] private Collider2D rightTopCheck;
-    
-    public Direction? IsTouchingWall()
+    public class CheckForTouch : MonoBehaviour
     {
-        if (leftBotCheck.IsTouchingLayers(groundLayer) || leftTopCheck.IsTouchingLayers(groundLayer))
-        {
-            return Direction.Left;
-        }
+        [SerializeField] private LayerMask groundLayer;
+        [SerializeField] private Collider2D leftBotCheck;
+        [SerializeField] private Collider2D leftTopCheck;
+        [SerializeField] private Collider2D rightBotCheck;
+        [SerializeField] private Collider2D rightTopCheck;
 
-        if (rightBotCheck.IsTouchingLayers(groundLayer) || rightTopCheck.IsTouchingLayers(groundLayer))
+        public Direction? IsTouchingWall()
         {
-            return Direction.Right;
-        }
+            if (leftBotCheck.IsTouchingLayers(groundLayer) || leftTopCheck.IsTouchingLayers(groundLayer))
+            {
+                return Direction.Left;
+            }
 
-        return null;
+            if (rightBotCheck.IsTouchingLayers(groundLayer) || rightTopCheck.IsTouchingLayers(groundLayer))
+            {
+                return Direction.Right;
+            }
+
+            return null;
+        }
     }
 }

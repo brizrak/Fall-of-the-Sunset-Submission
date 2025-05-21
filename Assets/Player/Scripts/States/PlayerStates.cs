@@ -1,12 +1,14 @@
-﻿using Player.Abilities;
-using UnityEngine;
+﻿using UnityEngine;
+using Player.Movement;
+using Player.Abilities;
 
-namespace Player.Scripts.States
+namespace Player.States
 {
+    [RequireComponent(typeof(JumpManager), typeof(AbilityList))]
     public class PlayerStates : MonoBehaviour
     {
         /*[HideInInspector]*/ public Ground ground;
-        /*[HideInInspector]*/ public Movement movement;
+        /*[HideInInspector]*/ public Moving moving;
         /*[HideInInspector]*/ public Direction direction;
         /*[HideInInspector]*/ public bool isCanMove;
         /*[HideInInspector]*/ public Ability currentAbility;
@@ -19,8 +21,8 @@ namespace Player.Scripts.States
         {
             // Изменить на проверку
             ground = Ground.Grounded;
-            movement = Movement.Idle;
-            direction = Direction.Left;
+            moving = Moving.Idle;
+            direction = Direction.Right;
             isCanMove = true;
             currentAbility = null;
             _jumpManager = GetComponent<JumpManager>();

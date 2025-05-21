@@ -1,5 +1,5 @@
-﻿using Player.Scripts.States;
-using UnityEngine;
+﻿using UnityEngine;
+using Player.States;
 
 namespace Player.Abilities
 {
