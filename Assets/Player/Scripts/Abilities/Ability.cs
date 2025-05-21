@@ -5,8 +5,7 @@ namespace Player.Abilities
 {
     public abstract class Ability : MonoBehaviour
     {
-        // [SerializeField] private AbilityData data; // return or delete
-        public bool isUnlock; // change
+        public bool isUnlock;
 
         [HideInInspector] public int priority;
         [SerializeField] private float cooldown;
@@ -16,8 +15,6 @@ namespace Player.Abilities
         protected virtual void Awake()
         {
             _states = GetComponent<PlayerStates>();
-            // _cooldown = data.cooldown;
-            // priority = data.priority;
             _lastUseTime = Time.time - cooldown;
         }
 
