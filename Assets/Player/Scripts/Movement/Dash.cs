@@ -55,6 +55,8 @@ namespace Player.Movement
 
         protected override void OnActivate()
         {
+            base.OnActivate();
+            
             SetSpeed();
             _states.isCanMove = false;
             _rb.gravityScale = 0;

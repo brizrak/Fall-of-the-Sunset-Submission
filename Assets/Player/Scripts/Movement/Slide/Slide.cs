@@ -26,6 +26,8 @@ namespace Player.Movement
 
         protected override void OnActivate()
         {
+            base.OnActivate();
+            
             _states.ground = Ground.Sliding;
             _sliding = _states.direction;
             direction = _states.direction;

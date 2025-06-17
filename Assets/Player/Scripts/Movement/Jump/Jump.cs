@@ -1,17 +1,22 @@
 using UnityEngine;
 using Player.States;
 using Player.Abilities;
+using Animations;
 
 namespace Player.Movement
 {
     [RequireComponent(typeof(Rigidbody2D))]
     public class Jump : JumpAbility
     {
+        [Header("Settings")]
         [SerializeField] protected float startPush;
         [SerializeField] private float force;
         [SerializeField] private float time;
         [SerializeField] private float endPush;
         [SerializeField] private float stopPush;
+        [Header("Animations")]
+        [SerializeField] private AnimationPreset holdAnimation;
+        [SerializeField] private AnimationPreset endAnimation;
 
         protected Rigidbody2D _rb;
 
@@ -35,6 +40,8 @@ namespace Player.Movement
 
         protected override void OnActivate()
         {
+            base.OnActivate();
+            
             _rb.linearVelocityY = startPush;
             _isStarting = true;
         }
@@ -58,6 +65,7 @@ namespace Player.Movement
             _rb.linearVelocityY = endPush;
             _isEndPushing = true;
             _isEnding = false;
+            _animationController.HandleAnimation(endAnimation);
         }
 
         protected virtual void FixedUpdate()
@@ -76,6 +84,7 @@ namespace Player.Movement
                     else
                     {
                         _timer = time;
+                        _animationController.HandleAnimation(holdAnimation);
                     }
 
                 }
