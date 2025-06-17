@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Player.States;
+using Animations;
 
 namespace Player.Abilities
 {
@@ -7,15 +8,20 @@ namespace Player.Abilities
     {
         public bool isUnlock;
 
-        [HideInInspector] public int priority;
         [SerializeField] private float cooldown;
+        [SerializeField] private AnimationPreset animationPreset;
+        
+        [HideInInspector] public int priority;
+        
         protected float _lastUseTime;
         protected PlayerStates _states;
+        protected AnimationController _animationController;
 
         protected virtual void Awake()
         {
             _states = GetComponent<PlayerStates>();
             _lastUseTime = Time.time - cooldown;
+            _animationController = GetComponent<AnimationController>();
         }
 
         protected bool CanActivate()
@@ -32,9 +38,9 @@ namespace Player.Abilities
             OnActivate();
         }
 
-        protected abstract void OnActivate();
+        protected virtual void OnActivate() => _animationController.HandleAnimation(animationPreset);
 
-        protected void Deactivate() => _states.DeactivateAbility(); 
+        protected void Deactivate() => _states.DeactivateAbility();
 
         public abstract void Stop();
 
