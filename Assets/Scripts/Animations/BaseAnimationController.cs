@@ -17,12 +17,12 @@ namespace Animations
             _animator.CrossFade(animationName, blendTime, layer, 0f); // CrossFadeInFixedTime ??
         }
 
-        public void HandleAnimation(AnimationPreset preset)
+        public virtual void HandleAnimation(AnimationPreset preset)
         {
             HandleAnimation(preset.AnimationName, preset.blendTime, 0);
         }
 
-        protected virtual void HandleLoopAnimation(AnimationPreset preset)
+        protected virtual void HandleStateAnimation(AnimationPreset preset)
         {
             if (preset.AnimationName == _currentAnimation) return;
             _currentAnimation = preset.AnimationName;

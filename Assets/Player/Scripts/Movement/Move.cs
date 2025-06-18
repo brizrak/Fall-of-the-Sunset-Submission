@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Player.States;
+using UnityEngine.Events;
 
 namespace Player.Movement
 {
@@ -18,6 +19,7 @@ namespace Player.Movement
         private float _currentAcceleration;
         private Vector2 _moveInput;
         public void MoveInput(Vector2 moveInput) => _moveInput = moveInput;
+        public UnityEvent onDirectionChange;
 
         private void Awake()
         {
@@ -53,6 +55,7 @@ namespace Player.Movement
         private void MoveSide()
         {
             if (!_states.isCanMove) return;
+            onDirectionChange?.Invoke();
 
             _states.direction = _moveInput.x switch
             {

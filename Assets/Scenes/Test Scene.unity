@@ -1602,6 +1602,10 @@ PrefabInstance:
       propertyPath: animationPreset
       value: 
       objectReference: {fileID: 11400000, guid: 32965a0d8f64d724ea2d8831dad2ec1f, type: 2}
+    - target: {fileID: 3990674475589616810, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4665463417582589550, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1657,6 +1661,62 @@ PrefabInstance:
     - target: {fileID: 8471311258536505833, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9050869868718170718, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: OnDirectionChange.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9050869868718170718, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: onDirectionChange.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9050869868718170718, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: OnDirectionChange.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9050869868718170718, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: onDirectionChange.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9050869868718170718, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: OnDirectionChange.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 934775371}
+    - target: {fileID: 9050869868718170718, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: onDirectionChange.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 934775371}
+    - target: {fileID: 9050869868718170718, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: OnDirectionChange.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9050869868718170718, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: onDirectionChange.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9050869868718170718, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: OnDirectionChange.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: MirrorAnimationDuringRun
+      objectReference: {fileID: 0}
+    - target: {fileID: 9050869868718170718, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: onDirectionChange.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: MirrorAnimationDuringRun
+      objectReference: {fileID: 0}
+    - target: {fileID: 9050869868718170718, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: OnDirectionChange.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Animations.AnimationController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 9050869868718170718, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: onDirectionChange.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Animations.AnimationController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 9050869868718170718, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: OnDirectionChange.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 9050869868718170718, guid: a1e0d18f82f16474eb847b0b567f0146, type: 3}
+      propertyPath: onDirectionChange.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

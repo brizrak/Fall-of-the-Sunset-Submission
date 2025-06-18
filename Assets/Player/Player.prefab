@@ -355,8 +355,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5695176637074976972}
   - {fileID: 8820929530508324784}
+  - {fileID: 5695176637074976972}
   - {fileID: 6777100785734001823}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -466,6 +466,9 @@ MonoBehaviour:
   acceleration: 10
   deceleration: 15
   maxFallSpeed: -15
+  OnDirectionChange:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &5009351342496095646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -479,8 +482,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isUnlock: 1
-  priority: 0
   cooldown: 0.5
+  animationPreset: {fileID: 0}
+  priority: 0
   dashSpeed: 10
   dashTime: 0.2
 --- !u!114 &7944659958417537481
@@ -513,13 +517,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isUnlock: 1
-  priority: 0
   cooldown: 0
+  animationPreset: {fileID: 0}
+  priority: 0
   startPush: 11
   force: 9
   time: 0.2
   endPush: 7
   stopPush: 0
+  holdAnimation: {fileID: 0}
+  endAnimation: {fileID: 0}
 --- !u!114 &2557931971536049483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -533,13 +540,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isUnlock: 1
-  priority: 0
   cooldown: 0
+  animationPreset: {fileID: 0}
+  priority: 0
   startPush: 11
   force: 9
   time: 0.2
   endPush: 7
   stopPush: 0
+  holdAnimation: {fileID: 0}
+  endAnimation: {fileID: 0}
   sideStartPush: 4
   sideForce: 2.5
 --- !u!114 &4165527064987814232
@@ -586,8 +596,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isUnlock: 1
-  priority: 0
   cooldown: 0
+  animationPreset: {fileID: 0}
+  priority: 0
   slideSpeed: -3
   wallJumpBuffer: 0.1
   direction: 0
