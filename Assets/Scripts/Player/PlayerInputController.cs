@@ -1,11 +1,11 @@
 using UnityEngine;
 using Player.Movement;
 
-namespace Settings
+namespace Player
 {
     [RequireComponent(typeof(InputSystemActions))]
     [RequireComponent(typeof(Move), typeof(JumpManager), typeof(Dash))]
-    public class PlayerController : MonoBehaviour
+    public class PlayerInputController : MonoBehaviour
     {
         private InputSystemActions _actions;
         private Move _playerMove;
