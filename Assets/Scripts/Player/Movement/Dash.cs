@@ -1,6 +1,6 @@
 using UnityEngine;
-using Player.States;
-using Player.Abilities;
+using States;
+using Abilities;
 
 namespace Player.Movement
 {

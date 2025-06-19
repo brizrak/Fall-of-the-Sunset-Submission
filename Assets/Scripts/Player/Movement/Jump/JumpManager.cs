@@ -1,5 +1,5 @@
 using UnityEngine;
-using Player.States;
+using States;
 
 namespace Player.Movement
 {

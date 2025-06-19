@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using Player.States;
+using States;
 using Animations;
 
-namespace Player.Abilities
+namespace Abilities
 {
     public abstract class Ability : MonoBehaviour
     {

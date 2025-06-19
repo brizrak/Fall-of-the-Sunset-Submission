@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Player.States;
+using States;
 using UnityEngine;
 
 namespace Player

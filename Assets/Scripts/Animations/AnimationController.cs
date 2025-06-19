@@ -1,4 +1,4 @@
-using Player.States;
+using States;
 using UnityEngine;
 
 namespace Animations

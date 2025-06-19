@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Settings;
 
-namespace Player.States
+namespace States
 {
     [RequireComponent(typeof(PlayerStates))]
     public class GroundCheck : MonoBehaviour

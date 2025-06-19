@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using Player.States;
+using States;
 using UnityEngine.Events;
 
 namespace Player.Movement

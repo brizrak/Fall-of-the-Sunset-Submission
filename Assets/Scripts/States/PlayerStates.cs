@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using Player.Movement;
-using Player.Abilities;
+using Abilities;
 
-namespace Player.States
+namespace States
 {
     [RequireComponent(typeof(JumpManager), typeof(AbilityList))]
     public class PlayerStates : MonoBehaviour

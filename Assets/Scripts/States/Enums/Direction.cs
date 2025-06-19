@@ -1,4 +1,4 @@
-﻿namespace Player.States
+﻿namespace States
 {
     public enum Direction
     {

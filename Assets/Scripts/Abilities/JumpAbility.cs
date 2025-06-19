@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Player.Abilities
+namespace Abilities
 {
     public abstract class JumpAbility : Ability
     {
