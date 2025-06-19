@@ -4,7 +4,7 @@ using UnityEngine.Events;
 // ReSharper disable once CheckNamespace
 namespace HealthSystem
 {
-    public class Health : MonoBehaviour
+    public class BaseHealth : MonoBehaviour
     {
         [Header("Settings")]
         [SerializeField] private int maxHealth;
