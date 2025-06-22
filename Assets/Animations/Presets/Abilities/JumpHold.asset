@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animation: {fileID: 7400000, guid: cefe04956ff9d8b4c80c7a48e96537cc, type: 2}
   blendTime: 0.1
-  layer: 0
+  isMirrored: 1

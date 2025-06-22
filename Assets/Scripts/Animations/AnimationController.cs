@@ -1,4 +1,4 @@
-using Player.States;
+using States;
 using UnityEngine;
 
 namespace Animations
@@ -16,6 +16,10 @@ namespace Animations
         
         private PlayerStates _states;
         private Direction _currentDirection;
+        private SpriteRenderer _currentRenderer;
+        
+        private bool _currentAnimationIsMirrored;
+        private string _currentAnimationName;
 
         protected override void Awake()
         {
@@ -23,14 +27,27 @@ namespace Animations
             _states = GetComponent<PlayerStates>();
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         protected override void HandleAnimation(string animationName, float blendTime, int layer = 0)
         {
-            animationName += _states.direction is Direction.Left ? "_L" : "_R";
+            if (_currentAnimationName != animationName)
+            {
+                _currentRenderer = GetComponentInChildren<SpriteRenderer>();
+                _currentAnimationName =  animationName;
+            }
+            MirrorAnimation();
             
             base.HandleAnimation(animationName, blendTime, layer);
         }
 
-        protected override void HandleLoopAnimation(AnimationPreset preset)
+        public override void HandleAnimation(AnimationPreset preset)
+        {
+            _currentAnimationIsMirrored = preset.isMirrored;
+            
+            base.HandleAnimation(preset);
+        }
+
+        protected override void HandleStateAnimation(AnimationPreset preset)
         {
             if (preset.AnimationName == _currentAnimation && _currentDirection == _states.direction) return;
             _currentAnimation = preset.AnimationName;
@@ -45,17 +62,29 @@ namespace Animations
             switch (_states.ground)
             {
                 case Ground.Falling:
-                    HandleLoopAnimation(fallAnimation);
+                    HandleStateAnimation(fallAnimation);
                     break;
                 case Ground.Sliding:
                     HandleAnimation(slideAnimation);
                     break;
                 default:
                 {
-                    HandleLoopAnimation(_states.moving is Moving.Idle ? idleAnimation : runAnimation);
+                    HandleStateAnimation(_states.moving is Moving.Idle ? idleAnimation : runAnimation);
                     break;
                 }
             }
+        }
+
+        private void MirrorAnimation()
+        {
+            _currentRenderer.flipX = _states.direction is Direction.Left;
+        }
+        
+        public void MirrorAnimationDuringRun()
+        {
+            if (!_currentAnimationIsMirrored) return;
+            if (_states.direction == _currentDirection) return;
+            MirrorAnimation();
         }
     }
 }
