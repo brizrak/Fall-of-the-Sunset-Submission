@@ -1,5 +1,6 @@
 using UnityEngine;
 using Animations;
+using Map;
 using States;
 
 namespace Player
@@ -13,14 +14,19 @@ namespace Player
         private PlayerStates _states;
         private Inaction _inaction;
         private AnimationController _animationController;
-        private Vector3 lastCheckpoint;
-        public void SetCheckpoint(Vector3 checkpoint) => lastCheckpoint = checkpoint;
+        private Checkpoint lastCheckpoint;
 
         private void Awake() {
             _rb = GetComponent<Rigidbody2D>();
             _states = GetComponent<PlayerStates>();
             _inaction = GetComponent<Inaction>();
             _animationController = GetComponent<AnimationController>();
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            FindForCheckpoint();
         }
 
         protected override void HandleDeath()
@@ -35,7 +41,7 @@ namespace Player
 
         private void Respawn()
         {
-            transform.position = lastCheckpoint;
+            MoveToCheckpoint();
             _animationController.HandleAnimation(animationPreset);
             health.ResetHealth();
             _rb.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -44,6 +50,23 @@ namespace Player
             _states.StopAbility();
             
             // safePositionRecorder.SetStablePosition(transform.position); // later
+        }
+
+        public void SetCheckpoint(Checkpoint checkpoint)
+        {
+            if (lastCheckpoint) lastCheckpoint.isActive = false;
+            lastCheckpoint = checkpoint;
+        }
+
+        private void FindForCheckpoint()
+        {
+            SetCheckpoint(FindAnyObjectByType<Checkpoint>());
+            MoveToCheckpoint();
+        }
+        
+        private void MoveToCheckpoint()
+        {
+            transform.position = lastCheckpoint.transform.position;
         }
     }
 }

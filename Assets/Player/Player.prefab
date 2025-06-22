@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 830716829984668977}
   m_Layer: 0
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -355,9 +355,10 @@ GameObject:
   - component: {fileID: 7632173317668529933}
   - component: {fileID: 2939364620225424762}
   - component: {fileID: 7962354578053065802}
+  - component: {fileID: 8484508161678439234}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -419,7 +420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4270326ce1dae8c42a7f0946adcc5b77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 1
   invincibleAfterDamage: 0
   invincibilityDuration: 1
   onHealthChanged:
@@ -448,6 +449,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: {fileID: 1584483183500017719}
   characterCollider: {fileID: 4319890639887556932}
+  animationPreset: {fileID: 11400000, guid: 08ae4f4132ba82a43845966d54c1c9f7, type: 2}
 --- !u!114 &7748537075575008075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -715,6 +717,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8484508161678439234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4665463417582589550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abc5f510ec09abe41a098f115e9807c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isUnlock: 1
+  cooldown: 0
+  animationPreset: {fileID: 11400000, guid: 08ae4f4132ba82a43845966d54c1c9f7, type: 2}
+  priority: 0
 --- !u!1 &5023140645704578642
 GameObject:
   m_ObjectHideFlags: 0

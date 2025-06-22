@@ -11,7 +11,7 @@ namespace Character
         
         private HurtBox _hurtBox;
 
-        private void Start()
+        protected virtual void Start()
         {
             health.onDeath.AddListener(HandleDeath);
             _hurtBox = characterCollider.GetComponent<HurtBox>();
