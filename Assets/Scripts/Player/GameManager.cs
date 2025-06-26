@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Player
@@ -6,9 +7,12 @@ namespace Player
     {
         [SerializeField] private GameObject playerPrefab;
 
+        public Action<GameObject> OnPlayerSpawned;
+
         private void Start()
         {
-            Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+            var player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+            OnPlayerSpawned?.Invoke(player);
         }
     }
 }
