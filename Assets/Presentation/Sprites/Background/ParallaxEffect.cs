@@ -45,6 +45,11 @@ public class ParallaxEffect : MonoBehaviour
 
     private void LateUpdate()
     {
+        var smoothedPosition = Vector3.Lerp(transform.position, _cameraTransform.position, 0.125f * Time.deltaTime * 60).y;
+        transform.position = new Vector3(transform.position.x, smoothedPosition, transform.position.z);
+        foreach (var clone in _clones) clone.transform.position = new Vector3(clone.transform.position.x, smoothedPosition, clone.transform.position.z);
+        
+        
         _delta = _cameraTransform.position - _lastCameraPosition;
         _parallaxMove = new Vector3(_delta.x * parallaxSpeed, _delta.y * parallaxSpeed);
         
